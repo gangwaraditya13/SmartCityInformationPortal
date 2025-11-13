@@ -7,6 +7,8 @@ import com.smart.city.SmartCityInformationPortal.repository.UtilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UtilityService {
 
@@ -20,9 +22,9 @@ public class UtilityService {
         Utility checkutility = utilityRepository.findByUtilityDepartment(newutility.getUtilityDepartment());
         if(checkutility!=null){
             Utility saved = utilityRepository.save(newutility);
-            City city = cityRepository.findById(cityId);
-            city.getCityUtilities().add(saved);
-            cityRepository.save(city);
+            Optional<City> city = cityRepository.findById(cityId);
+            city.get().getCityUtilities().add(saved);
+            cityRepository.save(city.get());
             return true;
         }
         return false;
@@ -54,8 +56,8 @@ public class UtilityService {
     }
 
     public boolean deleteutility(String utilityId){
-        boolean checkutility = utilityRepository.findById(utilityId);
-        if(checkutility){
+        Optional<Utility> checkutility = utilityRepository.findById(utilityId);
+        if(!checkutility.isEmpty()){
             utilityRepository.deleteById(utilityId);
             return true;
         }else{

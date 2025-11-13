@@ -22,6 +22,7 @@ public class SpringSecurity {
     @Autowired
     private UserDetailServiceImp userDetailServiceImp;
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity Http) throws Exception {
         return Http.authorizeHttpRequests(request -> request

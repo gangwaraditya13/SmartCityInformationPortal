@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -32,13 +33,13 @@ public class UserService {
     @Transactional
     public boolean saveNewUser(User newUser, String cityId){
         try {
-            City city = cityRepository.findById(cityId);
+            Optional<City> city = cityRepository.findById(cityId);
             newUser.setPassword(PASSWORD_ENCODER.encode(newUser.getPassword()));
             newUser.setSuspend(false);
             newUser.setRoll(Arrays.asList("USER"));
             User saved = userRepository.save(newUser);
-            city.getCityUsers().add(saved);
-            cityRepository.save(city);
+            city.get().getCityUsers().add(saved);
+            cityRepository.save(city.get());
             return true;
         } catch (Exception e) {
             log.error("Exception in User Service",e);
@@ -142,6 +143,7 @@ public class UserService {
 
         responceUser demoUser = new responceUser();
         User user = userRepository.findByEmail(Email);
+        userRepository.findAll();
         if(user != null) {
             demoUser.setName(user.getName());
             demoUser.setId(user.getId());

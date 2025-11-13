@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CityService {
@@ -30,10 +31,10 @@ public class CityService {
     }
 
     public boolean updateCity(String cityName,String cityId){
-        City checkCity = cityRepository.findById(cityId);
-        if(checkCity != null){
-            checkCity.setCityName(cityName);
-            cityRepository.save(checkCity);
+        Optional<City> checkCity = cityRepository.findById(cityId);
+        if(checkCity.isPresent()){
+            checkCity.get().setCityName(cityName);
+            cityRepository.save(checkCity.get());
             return true;
         }
         return false;
@@ -41,12 +42,12 @@ public class CityService {
 
     public City getCityInfo(String cityId){
         City demo = new City();
-        City city = cityRepository.findById(cityId);
-        if(city != null) {
-            demo.setCityName(city.getCityName());
-            demo.setCitySchools(city.getCitySchools());
-            demo.setCityHospitals(city.getCityHospitals());
-            demo.setCityUtilities(city.getCityUtilities());
+        Optional<City> city = cityRepository.findById(cityId);
+        if(city.isPresent()) {
+            demo.setCityName(city.get().getCityName());
+            demo.setCitySchools(city.get().getCitySchools());
+            demo.setCityHospitals(city.get().getCityHospitals());
+            demo.setCityUtilities(city.get().getCityUtilities());
             return demo;
         }
         return demo;

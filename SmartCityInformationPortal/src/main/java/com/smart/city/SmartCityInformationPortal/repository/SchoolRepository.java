@@ -5,7 +5,7 @@ import lombok.NonNull;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface SchoolRepository extends MongoRepository<School,Object> {
-    School findByName(@NonNull String schoolName);
+    School findBySchoolName(@NonNull String schoolName);
 
     boolean findById(String id);
 

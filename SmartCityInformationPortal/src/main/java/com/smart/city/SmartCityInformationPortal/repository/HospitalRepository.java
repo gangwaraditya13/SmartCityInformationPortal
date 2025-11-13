@@ -4,8 +4,10 @@ import com.smart.city.SmartCityInformationPortal.entities.Hospital;
 import lombok.NonNull;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface HospitalRepository extends MongoRepository<Hospital, Object> {
-    Hospital findByName(@NonNull String schoolName);
+import java.util.Optional;
 
-    boolean findById(String id);
+public interface HospitalRepository extends MongoRepository<Hospital, String> {
+    Hospital findByHospitalName(@NonNull String schoolName);
+
+    Optional<Hospital> findById(String id);
 }

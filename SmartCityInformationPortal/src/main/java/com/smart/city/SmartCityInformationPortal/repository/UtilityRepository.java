@@ -3,8 +3,10 @@ package com.smart.city.SmartCityInformationPortal.repository;
 import com.smart.city.SmartCityInformationPortal.entities.Utility;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface UtilityRepository extends MongoRepository<Utility, Object> {
+import java.util.Optional;
+
+public interface UtilityRepository extends MongoRepository<Utility, String> {
     Utility findByUtilityDepartment(String name);
 
-    boolean findById(String id);
+    Optional<Utility> findById(String id);
 }

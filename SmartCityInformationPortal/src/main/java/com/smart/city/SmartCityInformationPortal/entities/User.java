@@ -37,4 +37,5 @@ public class User {
     private List<Complaint> complaintList = new ArrayList<>();
     private boolean suspend;
     private List<String> roll = new ArrayList<>();
+
 }

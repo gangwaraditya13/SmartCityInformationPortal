@@ -7,6 +7,8 @@ import com.smart.city.SmartCityInformationPortal.repository.SchoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class SchoolService {
 
@@ -17,12 +19,12 @@ public class SchoolService {
     private CityRepository cityRepository;
 
     public boolean newSchool(School newSchool, String cityId){
-        School checkSchool = schoolRepository.findByName(newSchool.getSchoolName());
+        School checkSchool = schoolRepository.findBySchoolName(newSchool.getSchoolName());
         if(checkSchool!=null){
             School saved = schoolRepository.save(newSchool);
-            City city = cityRepository.findById(cityId);
-            city.getCitySchools().add(saved);
-            cityRepository.save(city);
+            Optional<City> city = cityRepository.findById(cityId);
+            city.get().getCitySchools().add(saved);
+            cityRepository.save(city.get());
             return true;
         }
         return false;
@@ -30,7 +32,7 @@ public class SchoolService {
 
     public boolean updateSchool(School school){
         boolean anyChange = false;
-        School checkSchool = schoolRepository.findByName(school.getSchoolName());
+        School checkSchool = schoolRepository.findBySchoolName(school.getSchoolName());
         if(checkSchool.getSchoolAddress() != school.getSchoolAddress()){
             checkSchool.setSchoolAddress(school.getSchoolAddress());
             schoolRepository.save(checkSchool);
@@ -64,7 +66,7 @@ public class SchoolService {
     }
 
     public School schoolInfo(String schoolName){
-        School checkSchool = schoolRepository.findByName(schoolName);
+        School checkSchool = schoolRepository.findBySchoolName(schoolName);
         return checkSchool;
     }
 

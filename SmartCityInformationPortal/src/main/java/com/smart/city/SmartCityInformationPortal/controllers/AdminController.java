@@ -40,7 +40,7 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/make-admin/{userEmail}")
+    @PutMapping("/remove-admin/{userEmail}")
     public ResponseEntity<?> removeAdmin(@PathVariable String userEmail){
         boolean response = adminService.removeRoll(userEmail, "ADMIN");
         if(response){
@@ -49,7 +49,7 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/make-city-admin/{userEmail}")
+    @PutMapping("/remove-city-admin/{userEmail}")
     public ResponseEntity<?> removeCityAdmin(@PathVariable String userEmail){
         boolean response = adminService.removeRoll(userEmail, "CITY_ADMIN");
         if(response){
@@ -85,16 +85,6 @@ public class AdminController {
 
     @PutMapping("/update-city-name/{cityId}")
     public ResponseEntity<?> updateCity(@RequestBody String cityName, @PathVariable String cityId){
-        boolean response = cityService.updateCity(cityName, cityId);
-        if(response){
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-    }
-
-    @PutMapping("/update-city-name/{cityId}")
-    public ResponseEntity<?> updateUser(@RequestBody String cityName, @PathVariable String cityId){
         boolean response = cityService.updateCity(cityName, cityId);
         if(response){
             return new ResponseEntity<>(HttpStatus.OK);
