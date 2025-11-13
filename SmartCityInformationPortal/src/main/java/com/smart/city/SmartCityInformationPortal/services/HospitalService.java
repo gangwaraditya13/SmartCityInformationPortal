@@ -2,8 +2,8 @@ package com.smart.city.SmartCityInformationPortal.services;
 
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.Hospital;
-import com.smart.city.SmartCityInformationPortal.reposetry.CityRepository;
-import com.smart.city.SmartCityInformationPortal.reposetry.HospitalRepository;
+import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
+import com.smart.city.SmartCityInformationPortal.repository.HospitalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class HospitalService {
     @Autowired
     private CityRepository cityRepository;
 
-    public boolean newSchool(Hospital newHospital, String cityId){
+    public boolean newHospital(Hospital newHospital, String cityId){
         Hospital checkSchool = hospitalRepository.findByName(newHospital.getHospitalName());
         if(checkSchool!=null){
             Hospital saved = hospitalRepository.save(newHospital);
@@ -31,7 +31,7 @@ public class HospitalService {
         return false;
     }
 
-    public boolean updateSchool(Hospital hospital){
+    public boolean updateHospital(Hospital hospital){
         boolean anyChange = false;
         Hospital checkHospital = hospitalRepository.findByName(hospital.getHospitalName());
         if(checkHospital != null) {
@@ -54,29 +54,29 @@ public class HospitalService {
         return anyChange;
     }
 
-    public boolean addFacilities(String hospitalName,String facilitie){
+    public boolean addFacility(String hospitalName,String facility){
         Hospital checkHospital = hospitalRepository.findByName(hospitalName);
-        List<String> collect = checkHospital.getHospitalFacilities().stream().filter(x -> x.equals(facilitie)).collect(Collectors.toList());
+        List<String> collect = checkHospital.getHospitalFacilities().stream().filter(x -> x.equals(facility)).collect(Collectors.toList());
         if(collect.isEmpty()){
-            checkHospital.getHospitalFacilities().add(facilitie);
+            checkHospital.getHospitalFacilities().add(facility);
             hospitalRepository.save(checkHospital);
             return true;
         }
         return false;
     }
 
-    public boolean deleteFacilities(String hospitalName,String facilitie){
+    public boolean deleteFacility(String hospitalName,String facility){
         Hospital checkHospital = hospitalRepository.findByName(hospitalName);
-        List<String> collect = checkHospital.getHospitalFacilities().stream().filter(x -> x.equals(facilitie)).collect(Collectors.toList());
+        List<String> collect = checkHospital.getHospitalFacilities().stream().filter(x -> x.equals(facility)).collect(Collectors.toList());
         if(!collect.isEmpty()){
-            checkHospital.getHospitalFacilities().remove(facilitie);
+            checkHospital.getHospitalFacilities().remove(facility);
             hospitalRepository.save(checkHospital);
             return true;
         }
         return false;
     }
 
-    public boolean deleteUser(String hospitalId){
+    public boolean deleteHospital(String hospitalId){
         boolean checkHospital = hospitalRepository.findById(hospitalId);
         if(checkHospital){
             hospitalRepository.deleteById(hospitalId);

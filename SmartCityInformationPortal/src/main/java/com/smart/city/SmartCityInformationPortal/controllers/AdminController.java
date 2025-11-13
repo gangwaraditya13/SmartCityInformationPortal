@@ -5,6 +5,7 @@ import com.smart.city.SmartCityInformationPortal.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,23 +16,49 @@ import java.util.List;
 public class AdminController {
 
     @Autowired
+    private AdminService adminService;
+
+    @Autowired
     private CityService cityService;
 
-    @Autowired
-    private UserService userService;
+    /// make ADMIN and CITY_ADMIN
+    @PutMapping("/make-admin/{userEmail}")
+    public ResponseEntity<?> makeAdmin(@PathVariable String userEmail){
+        boolean response = adminService.updateUserRoll(userEmail, "ADMIN");
+        if(response){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
-    @Autowired
-    private HospitalService hospitalService;
+    @PutMapping("/make-city-admin/{userEmail}")
+    public ResponseEntity<?> makeCityAdmin(@PathVariable String userEmail){
+        boolean response = adminService.updateUserRoll(userEmail, "CITY_ADMIN");
+        if(response){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
-    @Autowired
-    private ComplaintService complaintService;
+    @PutMapping("/make-admin/{userEmail}")
+    public ResponseEntity<?> removeAdmin(@PathVariable String userEmail){
+        boolean response = adminService.removeRoll(userEmail, "ADMIN");
+        if(response){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
-    @Autowired
-    private SchoolService schoolService;
+    @PutMapping("/make-city-admin/{userEmail}")
+    public ResponseEntity<?> removeCityAdmin(@PathVariable String userEmail){
+        boolean response = adminService.removeRoll(userEmail, "CITY_ADMIN");
+        if(response){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
-    @Autowired
-    private UtilityService utilityService;
-
+    /// city
     @GetMapping("/all-city")
     public ResponseEntity<?> getAllCity(){
         List<City> allCityInfo = cityService.getAllCityInfo();
@@ -75,5 +102,28 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }
+
+    /// user blocking
+
+    @PutMapping("/block-user/{userEmail}")
+    public ResponseEntity<?> blockUser(@PathVariable String userEmail){
+        String emailCityAdmin = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean response = adminService.toSuspend(emailCityAdmin, userEmail);
+        if(response) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/unblock-user/{userEmail}")
+    public ResponseEntity<?> unblockUser(@PathVariable String userEmail){
+        String emailCityAdmin = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean response = adminService.toSuspend(emailCityAdmin, userEmail);
+        if(response) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 
 }

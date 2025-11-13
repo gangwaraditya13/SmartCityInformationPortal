@@ -4,15 +4,13 @@ import Component.UpdateTitleOrDescription;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.Complaint;
 import com.smart.city.SmartCityInformationPortal.entities.User;
-import com.smart.city.SmartCityInformationPortal.reposetry.CityRepository;
-import com.smart.city.SmartCityInformationPortal.reposetry.ComplaintRepository;
-import com.smart.city.SmartCityInformationPortal.reposetry.UserRepository;
+import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
+import com.smart.city.SmartCityInformationPortal.repository.ComplaintRepository;
+import com.smart.city.SmartCityInformationPortal.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -89,6 +87,5 @@ public class ComplaintService {
         }
         return findComplaint;
     }
-
 
 }

@@ -2,8 +2,7 @@ package com.smart.city.SmartCityInformationPortal.services;
 
 import Component.responceUser;
 import com.smart.city.SmartCityInformationPortal.entities.City;
-import com.smart.city.SmartCityInformationPortal.reposetry.CityRepository;
-import com.smart.city.SmartCityInformationPortal.reposetry.UserRepository;
+import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +54,7 @@ public class CityService {
 
     public City getCityInfoAdmin(String Email){
 
-        responceUser info = userService.getInfo(Email);
+        responceUser info = userService.getInfoAdmin(Email);
         City city = cityRepository.findByCityName(info.getCity());
         if(city != null) {
             return city;

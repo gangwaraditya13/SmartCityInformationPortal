@@ -1,10 +1,8 @@
-package com.smart.city.SmartCityInformationPortal.reposetry;
+package com.smart.city.SmartCityInformationPortal.repository;
 
 import com.smart.city.SmartCityInformationPortal.entities.School;
 import lombok.NonNull;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.util.Optional;
 
 public interface SchoolRepository extends MongoRepository<School,Object> {
     School findByName(@NonNull String schoolName);

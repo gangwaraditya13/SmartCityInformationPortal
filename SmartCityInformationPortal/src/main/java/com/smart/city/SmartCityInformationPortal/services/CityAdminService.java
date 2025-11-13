@@ -2,9 +2,9 @@ package com.smart.city.SmartCityInformationPortal.services;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.Complaint;
 import com.smart.city.SmartCityInformationPortal.entities.User;
-import com.smart.city.SmartCityInformationPortal.reposetry.CityRepository;
-import com.smart.city.SmartCityInformationPortal.reposetry.ComplaintRepository;
-import com.smart.city.SmartCityInformationPortal.reposetry.UserRepository;
+import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
+import com.smart.city.SmartCityInformationPortal.repository.ComplaintRepository;
+import com.smart.city.SmartCityInformationPortal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,14 +32,14 @@ public class CityAdminService {
        return pendingComplaints;
     }
 
-    public List<Complaint> notPendingComplaint(String email){
+    public List<Complaint> resolvedComplaint(String email){
 
         User user = userRepository.findByEmail(email);
 
         City city = cityRepository.findByCityName(user.getCity());
 
-        List<Complaint> notPendingComplaints = city.getCityComplaint().stream().filter(x -> !x.getComplaintStatus().equals("PENDING")).collect(Collectors.toList());
-        return notPendingComplaints;
+        List<Complaint> resolvedComplaints = city.getCityComplaint().stream().filter(x -> !x.getComplaintStatus().equals("PENDING")).collect(Collectors.toList());
+        return resolvedComplaints;
     }
 
     public boolean toSuspend(String emailCityAdmin,String email){
@@ -68,6 +68,15 @@ public class CityAdminService {
                 user.setSuspend(false);
                 userRepository.save(user);
             }
+        }
+        return false;
+    }
+
+    public boolean updateComplaintStatus(String complaintId){
+        Complaint findComplaint = complaintRepository.findById(complaintId);
+        if(findComplaint != null){
+            findComplaint.setComplaintStatus("RESOLVED");
+            return true;
         }
         return false;
     }

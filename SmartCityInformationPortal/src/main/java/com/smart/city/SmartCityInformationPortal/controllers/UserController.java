@@ -2,6 +2,7 @@ package com.smart.city.SmartCityInformationPortal.controllers;
 
 import Component.UpdateGmailOrUserName;
 import Component.responceUser;
+import com.smart.city.SmartCityInformationPortal.entities.User;
 import com.smart.city.SmartCityInformationPortal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/get-info")
+    @GetMapping
     public ResponseEntity<?> getUser(){
         String Email = SecurityContextHolder.getContext().getAuthentication().getName();
-        responceUser info = userService.getInfo(Email);
+        User info = userService.getInfo(Email);
         if(info != null){
             return new ResponseEntity<>(info,HttpStatus.OK);
         }

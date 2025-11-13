@@ -3,8 +3,8 @@ package com.smart.city.SmartCityInformationPortal.services;
 import Component.*;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.User;
-import com.smart.city.SmartCityInformationPortal.reposetry.CityRepository;
-import com.smart.city.SmartCityInformationPortal.reposetry.UserRepository;
+import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
+import com.smart.city.SmartCityInformationPortal.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -138,7 +138,7 @@ public class UserService {
     }
 
     /// get info of user
-    public responceUser getInfo(String Email) {
+    public responceUser getInfoAdmin(String Email) {
 
         responceUser demoUser = new responceUser();
         User user = userRepository.findByEmail(Email);
@@ -152,6 +152,16 @@ public class UserService {
         }
         return demoUser;
     }
+
+    /// get info of user
+    public User getInfo(String Email) {
+        User user = userRepository.findByEmail(Email);
+        if(user != null) {
+           return user;
+        }
+        return user;
+    }
+
 
 
     public List<User> getAllUsers(){

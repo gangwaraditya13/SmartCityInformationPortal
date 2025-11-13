@@ -53,5 +53,4 @@ public class ComplaintController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
 }

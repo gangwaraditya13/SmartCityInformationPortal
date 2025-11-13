@@ -1,7 +1,7 @@
 package com.smart.city.SmartCityInformationPortal.services.Impl;
 
 import com.smart.city.SmartCityInformationPortal.entities.User;
-import com.smart.city.SmartCityInformationPortal.reposetry.UserRepository;
+import com.smart.city.SmartCityInformationPortal.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

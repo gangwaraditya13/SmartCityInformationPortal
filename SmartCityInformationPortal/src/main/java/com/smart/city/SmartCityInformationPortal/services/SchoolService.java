@@ -2,8 +2,8 @@ package com.smart.city.SmartCityInformationPortal.services;
 
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.School;
-import com.smart.city.SmartCityInformationPortal.reposetry.CityRepository;
-import com.smart.city.SmartCityInformationPortal.reposetry.SchoolRepository;
+import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
+import com.smart.city.SmartCityInformationPortal.repository.SchoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +53,7 @@ public class SchoolService {
         return anyChange;
     }
 
-    public boolean deleteUser(String schoolId){
+    public boolean deleteSchool(String schoolId){
         boolean checkSchool = schoolRepository.findById(schoolId);
         if(checkSchool){
             schoolRepository.deleteById(schoolId);

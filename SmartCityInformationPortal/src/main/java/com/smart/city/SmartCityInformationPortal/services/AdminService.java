@@ -1,7 +1,7 @@
 package com.smart.city.SmartCityInformationPortal.services;
 
 import com.smart.city.SmartCityInformationPortal.entities.*;
-import com.smart.city.SmartCityInformationPortal.reposetry.*;
+import com.smart.city.SmartCityInformationPortal.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +14,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class AdminService {
-
-    @Autowired
-    private ComplaintRepository complaintRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -120,5 +117,8 @@ public class AdminService {
         List<Utility> allUtility = utilityRepository.findAll();
         return allUtility;
     }
+
+
+
 
 }

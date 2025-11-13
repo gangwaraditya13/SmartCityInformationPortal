@@ -1,6 +1,5 @@
-package com.smart.city.SmartCityInformationPortal.reposetry;
+package com.smart.city.SmartCityInformationPortal.repository;
 
-import com.smart.city.SmartCityInformationPortal.entities.User;
 import com.smart.city.SmartCityInformationPortal.entities.Utility;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
