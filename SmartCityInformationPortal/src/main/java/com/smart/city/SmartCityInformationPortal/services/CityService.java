@@ -22,7 +22,7 @@ public class CityService {
     public boolean newCity(String cityName){
         City city = new City();
         City checkCity = cityRepository.findByCityName(cityName);
-        if(checkCity != null){
+        if(checkCity == null){
             city.setCityName(cityName);
             cityRepository.save(city);
             return true;

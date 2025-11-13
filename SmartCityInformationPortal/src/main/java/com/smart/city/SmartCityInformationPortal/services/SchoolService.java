@@ -20,7 +20,7 @@ public class SchoolService {
 
     public boolean newSchool(School newSchool, String cityId){
         School checkSchool = schoolRepository.findBySchoolName(newSchool.getSchoolName());
-        if(checkSchool!=null){
+        if(checkSchool==null){
             School saved = schoolRepository.save(newSchool);
             Optional<City> city = cityRepository.findById(cityId);
             city.get().getCitySchools().add(saved);

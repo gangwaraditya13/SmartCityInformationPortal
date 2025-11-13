@@ -50,7 +50,7 @@ public class UserService {
     /// check user
     public boolean saveUser(User user){
         User checkUser = userRepository.findByEmail(user.getEmail());
-        if(checkUser.getEmail().equals(user.getEmail())){
+        if(!checkUser.getEmail().equals(user.getEmail())){
             return true;
         }
         return false;

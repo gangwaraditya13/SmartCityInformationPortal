@@ -20,7 +20,7 @@ public class UtilityService {
 
     public boolean newutility(Utility newutility, String cityId){
         Utility checkutility = utilityRepository.findByUtilityDepartment(newutility.getUtilityDepartment());
-        if(checkutility!=null){
+        if(checkutility==null){
             Utility saved = utilityRepository.save(newutility);
             Optional<City> city = cityRepository.findById(cityId);
             city.get().getCityUtilities().add(saved);

@@ -22,7 +22,7 @@ public class HospitalService {
 
     public boolean newHospital(Hospital newHospital, String cityId){
         Hospital checkSchool = hospitalRepository.findByHospitalName(newHospital.getHospitalName());
-        if(checkSchool!=null){
+        if(checkSchool==null){
             Hospital saved = hospitalRepository.save(newHospital);
             Optional<City> city = cityRepository.findById(cityId);
             city.get().getCityHospitals().add(saved);
