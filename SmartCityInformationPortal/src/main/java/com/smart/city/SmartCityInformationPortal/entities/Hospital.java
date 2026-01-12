@@ -3,7 +3,9 @@ package com.smart.city.SmartCityInformationPortal.entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Document(collection = "hospital")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Hospital {
 
     @JsonProperty("_id")
@@ -25,7 +29,7 @@ public class Hospital {
     @NonNull
     private String hospitalAddress;
     @NonNull
-    private int hospitalContact;
+    private String hospitalContact;
 
     private List<String> hospitalFacilities = new ArrayList<>();
 

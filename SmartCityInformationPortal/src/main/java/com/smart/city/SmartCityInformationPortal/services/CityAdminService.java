@@ -26,7 +26,7 @@ public class CityAdminService {
 
         User user = userRepository.findByEmail(email);
 
-        City city = cityRepository.findByCityName(user.getCity());
+        City city = cityRepository.findByCityName(user.getCity()).orElseThrow();
 
        List<Complaint> pendingComplaints = city.getCityComplaint().stream().filter(x -> x.getComplaintStatus().equals("PENDING")).collect(Collectors.toList());
        return pendingComplaints;
@@ -36,7 +36,7 @@ public class CityAdminService {
 
         User user = userRepository.findByEmail(email);
 
-        City city = cityRepository.findByCityName(user.getCity());
+        City city = cityRepository.findByCityName(user.getCity()).orElseThrow();
 
         List<Complaint> resolvedComplaints = city.getCityComplaint().stream().filter(x -> !x.getComplaintStatus().equals("PENDING")).collect(Collectors.toList());
         return resolvedComplaints;
@@ -48,10 +48,11 @@ public class CityAdminService {
 
         List<String> cityAdmin = userCityAdmin.getRoll().stream().filter(x -> x.toUpperCase().equals("CITY_ADMIN")).collect(Collectors.toList());
 
-        if(cityAdmin != null){
+        if(cityAdmin != null && !email.equals(emailCityAdmin) && user.getCity().equals(userCityAdmin.getCity())){
             if (user != null){
                 user.setSuspend(true);
                 userRepository.save(user);
+                return true;
             }
         }
         return false;
@@ -63,10 +64,11 @@ public class CityAdminService {
 
         List<String> cityAdmin = userCityAdmin.getRoll().stream().filter(x -> x.toUpperCase().equals("CITY_ADMIN")).collect(Collectors.toList());
 
-        if(cityAdmin != null){
+        if(cityAdmin != null && !email.equals(emailCityAdmin) && user.getCity().equals(userCityAdmin.getCity())){
             if (user != null){
                 user.setSuspend(false);
                 userRepository.save(user);
+                return true;
             }
         }
         return false;

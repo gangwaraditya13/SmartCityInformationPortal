@@ -1,9 +1,13 @@
 package com.smart.city.SmartCityInformationPortal.controllers;
 
-import Component.UpdateGmailOrUserName;
-import Component.responceUser;
-import com.smart.city.SmartCityInformationPortal.entities.User;
+import com.smart.city.SmartCityInformationPortal.services.CityService;
 import com.smart.city.SmartCityInformationPortal.services.UserService;
+import dto.city.CityNameDot;
+import dto.complaint.UpdateGmailOrUserName;
+import dto.user.PasswordResetDto;
+import dto.user.RequestPasswordDot;
+import dto.user.UserDto;
+import dto.user.UserResponseCityDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +23,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public ResponseEntity<?> getUser(){
+    @Autowired
+    private CityService cityService;
+
+    @GetMapping("/getuser")
+    public ResponseEntity<UserDto> getUser(){
         String Email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User info = userService.getInfo(Email);
+        UserDto info = userService.getInfo(Email);
         if(info != null){
             return new ResponseEntity<>(info,HttpStatus.OK);
         }
@@ -30,9 +37,18 @@ public class UserController {
     }
 
     @PutMapping("/update-password")
-    public ResponseEntity<?> updateUser(UpdateGmailOrUserName UpdateGmailOrUserName){
+    public ResponseEntity<?> updateUserPassword(@RequestBody PasswordResetDto passwordResetDto){
+        boolean response = userService.updatePassword(passwordResetDto);
+        if(response){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @PutMapping("/update-user")
+    public ResponseEntity<?> updateUser(@RequestBody UpdateGmailOrUserName updateGmailOrUserName){
         String Email = SecurityContextHolder.getContext().getAuthentication().getName();
-        boolean response = userService.updateUser(UpdateGmailOrUserName, Email);
+        boolean response = userService.updateUser(updateGmailOrUserName, Email);
         if(response){
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -40,15 +56,37 @@ public class UserController {
     }
 
     @DeleteMapping("/delete-user")
-    public ResponseEntity<?> deleteUser(@RequestBody String passwordRequest){
+    public ResponseEntity<?> deleteUser(@RequestBody RequestPasswordDot passwordRequest){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String Email = authentication.getName();
-        boolean check = userService.deleteUser(passwordRequest, Email);
+        boolean check = userService.deleteUser(passwordRequest.getPassword(), Email);
         if(check){
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    
 
+    @GetMapping("/own-city-info")
+    public ResponseEntity<?> getOwnCityInfo(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        UserDto userInfo = userService.getInfo(email);
+        UserResponseCityDto ownCityInfo = cityService.getOwnCityInfo(userInfo.getCity());
+        if(ownCityInfo != null) {
+            return new ResponseEntity<>(ownCityInfo,HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/other-city-info")
+    public ResponseEntity<?> getOtherCityInfo(@RequestBody CityNameDot cityNameDot){
+
+        UserResponseCityDto ownCityInfo = cityService.getOwnCityInfo(cityNameDot.getName());
+        if(ownCityInfo != null) {
+            return new ResponseEntity<>(ownCityInfo,HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

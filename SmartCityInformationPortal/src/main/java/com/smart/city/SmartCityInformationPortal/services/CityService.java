@@ -1,10 +1,15 @@
 package com.smart.city.SmartCityInformationPortal.services;
 
-import Component.responceUser;
+import dto.city.CityDto;
+import dto.city.CityResponseDto;
+import dto.user.UserDto;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
+import dto.user.UserResponseCityDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,21 +18,25 @@ import java.util.Optional;
 public class CityService {
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     private CityRepository cityRepository;
 
     @Autowired
     private UserService userService;
 
 
-    public boolean newCity(String cityName){
+    @Transactional
+    public CityDto newCity(String cityName){
         City city = new City();
-        City checkCity = cityRepository.findByCityName(cityName);
-        if(checkCity == null){
+        Optional<City> checkCity = cityRepository.findByCityName(cityName);
+        if(!checkCity.isPresent()){
             city.setCityName(cityName);
             cityRepository.save(city);
-            return true;
+            return modelMapper.map(city, CityDto.class);
         }
-        return false;
+        return null;
     }
 
     public boolean updateCity(String cityName,String cityId){
@@ -40,27 +49,24 @@ public class CityService {
         return false;
     }
 
-    public City getCityInfo(String cityId){
-        City demo = new City();
-        Optional<City> city = cityRepository.findById(cityId);
-        if(city.isPresent()) {
-            demo.setCityName(city.get().getCityName());
-            demo.setCitySchools(city.get().getCitySchools());
-            demo.setCityHospitals(city.get().getCityHospitals());
-            demo.setCityUtilities(city.get().getCityUtilities());
-            return demo;
-        }
-        return demo;
+    public CityResponseDto getCityInfo(String cityId){
+        City city = cityRepository.findById(cityId).orElseThrow();
+
+        return modelMapper.map(city, CityResponseDto.class);
     }
 
-    public City getCityInfoAdmin(String Email){
+    public UserResponseCityDto getOwnCityInfo(String cityName){
+        City city = cityRepository.findByCityName(cityName).orElseThrow();
 
-        responceUser info = userService.getInfoAdmin(Email);
-        City city = cityRepository.findByCityName(info.getCity());
-        if(city != null) {
-            return city;
-        }
-        return city;
+        return modelMapper.map(city, UserResponseCityDto.class);
+    }
+
+    public CityDto getCityInfoAdmin(String Email){
+
+        UserDto info = userService.getInfoAdmin(Email);
+        City city = cityRepository.findByCityName(info.getCity()).orElseThrow();
+
+        return  modelMapper.map(city,CityDto.class);
     }
 
     public List<City> getAllCityInfo(){

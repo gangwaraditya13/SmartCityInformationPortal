@@ -3,7 +3,9 @@ package com.smart.city.SmartCityInformationPortal.entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Data
 @Document(collection = "city")
+@AllArgsConstructor
+@NoArgsConstructor
 public class City {
     @JsonProperty("_id")
     @Id
@@ -23,13 +27,13 @@ public class City {
     @Indexed(unique = true)
     String cityName;
     @DBRef
-    List<User> cityUsers;
+    List<User> cityUsers = new ArrayList<>();
     @DBRef
-    List<School> citySchools;
+    List<School> citySchools= new ArrayList<>();
     @DBRef
-    List<Hospital> cityHospitals;
+    List<Hospital> cityHospitals= new ArrayList<>();
     @DBRef
-    List<Utility> cityUtilities;
+    List<Utility> cityUtilities= new ArrayList<>();
     @DBRef
-    List<Complaint> cityComplaint;
+    List<Complaint> cityComplaint= new ArrayList<>();
 }

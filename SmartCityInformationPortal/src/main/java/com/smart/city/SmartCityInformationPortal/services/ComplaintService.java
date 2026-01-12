@@ -1,6 +1,7 @@
 package com.smart.city.SmartCityInformationPortal.services;
 
-import Component.UpdateTitleOrDescription;
+import dto.complaint.ComplaintDto;
+import dto.complaint.UpdateTitleOrDescription;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.Complaint;
 import com.smart.city.SmartCityInformationPortal.entities.User;
@@ -8,6 +9,7 @@ import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
 import com.smart.city.SmartCityInformationPortal.repository.ComplaintRepository;
 import com.smart.city.SmartCityInformationPortal.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
 public class ComplaintService {
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     private ComplaintRepository complaintRepository;
@@ -26,12 +31,13 @@ public class ComplaintService {
     private CityRepository cityRepository;
 
     @Transactional
-    public boolean createComplaint(Complaint complaint, String email){
+    public boolean createComplaint(ComplaintDto complaintDto, String email){
 
         try {
             User user = userRepository.findByEmail(email);
-            City city = cityRepository.findByCityName(user.getCity());
+            City city = cityRepository.findByCityName(user.getCity()).orElseThrow();
             if(user != null) {
+                Complaint complaint = modelMapper.map(complaintDto, Complaint.class);
                 complaint.setComplaintStatus("PENDING");
                 Complaint saved = complaintRepository.save(complaint);
                 user.getComplaintList().add(saved);

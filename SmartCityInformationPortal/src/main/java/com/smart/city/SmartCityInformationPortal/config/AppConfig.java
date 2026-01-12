@@ -1,39 +1,21 @@
 package com.smart.city.SmartCityInformationPortal.config;
 
 import com.smart.city.SmartCityInformationPortal.services.Impl.UserDetailServiceImp;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
-public class SpringSecurity {
-
+public class AppConfig {
     @Autowired
     private UserDetailServiceImp userDetailServiceImp;
 
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity Http) throws Exception {
-        return Http.authorizeHttpRequests(request -> request
-                        .requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/complaint/**", "/user/**").authenticated()
-                        .requestMatchers("/admin/**").hasAnyRole("ADMIN", "CITY_ADMIN")
-                        .requestMatchers("/city-admin/**").hasRole("CITY_ADMIN")
-                        .anyRequest().permitAll())
-                .httpBasic(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable).build();
-    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -49,4 +31,10 @@ public class SpringSecurity {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
+    }
+
 }

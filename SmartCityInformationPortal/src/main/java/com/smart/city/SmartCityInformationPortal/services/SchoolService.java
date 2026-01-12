@@ -2,8 +2,12 @@ package com.smart.city.SmartCityInformationPortal.services;
 
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.School;
+import com.smart.city.SmartCityInformationPortal.entities.User;
 import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
 import com.smart.city.SmartCityInformationPortal.repository.SchoolRepository;
+import com.smart.city.SmartCityInformationPortal.repository.UserRepository;
+import dto.school.SchoolDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +22,21 @@ public class SchoolService {
     @Autowired
     private CityRepository cityRepository;
 
-    public boolean newSchool(School newSchool, String cityId){
-        School checkSchool = schoolRepository.findBySchoolName(newSchool.getSchoolName());
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public boolean newSchool(SchoolDto newSchoolDto, String adminEmail){
+
+        User cityAdmin = userRepository.findByEmail(adminEmail);
+
+        School checkSchool = schoolRepository.findBySchoolName(newSchoolDto.getSchoolName());
         if(checkSchool==null){
-            School saved = schoolRepository.save(newSchool);
-            Optional<City> city = cityRepository.findById(cityId);
+            School school = modelMapper.map(newSchoolDto, School.class);
+            School saved = schoolRepository.save(school);
+            Optional<City> city = cityRepository.findById(cityAdmin.getCity());
             city.get().getCitySchools().add(saved);
             cityRepository.save(city.get());
             return true;
@@ -30,25 +44,31 @@ public class SchoolService {
         return false;
     }
 
-    public boolean updateSchool(School school){
+    public boolean updateSchool(SchoolDto schoolDto){
         boolean anyChange = false;
-        School checkSchool = schoolRepository.findBySchoolName(school.getSchoolName());
-        if(checkSchool.getSchoolAddress() != school.getSchoolAddress()){
-            checkSchool.setSchoolAddress(school.getSchoolAddress());
+        School checkSchool = schoolRepository.findBySchoolName(schoolDto.getSchoolName());
+        if(checkSchool.getSchoolName().equals(schoolDto.getSchoolName())){
+            checkSchool.setSchoolName(schoolDto.getSchoolName());
             schoolRepository.save(checkSchool);
             anyChange = true;
         }
-        if(checkSchool.getSchoolContact() != school.getSchoolContact()){
-            checkSchool.setSchoolContact(school.getSchoolContact());
+        if(checkSchool.getOwnership().equals(schoolDto.getOwnership())){
+            checkSchool.setOwnership(schoolDto.getOwnership());
             schoolRepository.save(checkSchool);
             anyChange = true;
         }
-        if(checkSchool.getSchoolType() != school.getSchoolType()){
-            checkSchool.setSchoolType(school.getSchoolType());
+        if(checkSchool.getCategory().equals(schoolDto.getCategory())){
+            checkSchool.setCategory(schoolDto.getCategory());
             schoolRepository.save(checkSchool);
             anyChange = true;
-        }if(checkSchool.getSchoolName() != school.getSchoolName()){
-            checkSchool.setSchoolName(school.getSchoolName());
+        }
+        if(checkSchool.getSchoolAddress().equals(schoolDto.getSchoolAddress())){
+            checkSchool.setSchoolAddress(schoolDto.getSchoolAddress());
+            schoolRepository.save(checkSchool);
+            anyChange = true;
+        }
+        if(checkSchool.getSchoolContact().equals(schoolDto.getSchoolContact())){
+            checkSchool.setSchoolContact(schoolDto.getSchoolContact());
             schoolRepository.save(checkSchool);
             anyChange = true;
         }

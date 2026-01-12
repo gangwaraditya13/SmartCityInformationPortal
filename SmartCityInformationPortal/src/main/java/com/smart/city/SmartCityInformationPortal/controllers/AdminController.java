@@ -2,6 +2,9 @@ package com.smart.city.SmartCityInformationPortal.controllers;
 
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.services.*;
+import dto.city.CityDto;
+import dto.city.CityNameDot;
+import dto.city.CityResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +62,7 @@ public class AdminController {
     }
 
     /// city
-    @GetMapping("/all-city")
+    @GetMapping("/allcity")
     public ResponseEntity<?> getAllCity(){
         List<City> allCityInfo = cityService.getAllCityInfo();
         return new ResponseEntity<>(allCityInfo, HttpStatus.OK);
@@ -67,7 +70,7 @@ public class AdminController {
 
     @GetMapping("/city/{cityId}")
     public ResponseEntity<?> getCity(@PathVariable String cityId){
-        City cityInfo = cityService.getCityInfo(cityId);
+        CityResponseDto cityInfo = cityService.getCityInfo(cityId);
         if(cityInfo != null) {
             return new ResponseEntity<>(cityInfo, HttpStatus.OK);
         }
@@ -75,17 +78,17 @@ public class AdminController {
     }
 
     @PostMapping("/new-city")
-    public ResponseEntity<?> addCity(@RequestBody String cityName){
-        boolean response = cityService.newCity(cityName);
-        if(response){
-            return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<?> createCity(@RequestBody City city){
+        CityDto response = cityService.newCity(city.getCityName());
+        if(response != null){
+            return new ResponseEntity<>(response,HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PutMapping("/update-city-name/{cityId}")
-    public ResponseEntity<?> updateCity(@RequestBody String cityName, @PathVariable String cityId){
-        boolean response = cityService.updateCity(cityName, cityId);
+    public ResponseEntity<?> updateCity(@RequestBody CityNameDot cityName, @PathVariable String cityId){
+        boolean response = cityService.updateCity(cityName.getName(), cityId);
         if(response){
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -108,12 +111,11 @@ public class AdminController {
     @PutMapping("/unblock-user/{userEmail}")
     public ResponseEntity<?> unblockUser(@PathVariable String userEmail){
         String emailCityAdmin = SecurityContextHolder.getContext().getAuthentication().getName();
-        boolean response = adminService.toSuspend(emailCityAdmin, userEmail);
+        boolean response = adminService.toResume(emailCityAdmin, userEmail);
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
 
 }

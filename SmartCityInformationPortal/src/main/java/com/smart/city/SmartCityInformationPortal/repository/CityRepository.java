@@ -9,6 +9,6 @@ public interface CityRepository extends MongoRepository<City, String> {
 
     Optional<City> findById(String cityId);
 
-    City findByCityName(String cityName);
+    Optional<City> findByCityName(String cityName);
 
 }

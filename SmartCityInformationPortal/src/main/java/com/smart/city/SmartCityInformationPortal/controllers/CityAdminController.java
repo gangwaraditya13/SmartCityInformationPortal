@@ -2,16 +2,26 @@ package com.smart.city.SmartCityInformationPortal.controllers;
 
 import com.smart.city.SmartCityInformationPortal.entities.*;
 import com.smart.city.SmartCityInformationPortal.services.*;
+import dto.hospital.HospitalFacilityDto;
+import dto.city.CityDto;
+import dto.hospital.HospitalIdDto;
+import dto.hospital.HospitalDto;
+import dto.school.SchoolDto;
+import dto.school.SchoolIdDto;
+import dto.school.SchoolNameDto;
+import dto.utility.UtilityDto;
+import dto.utility.UtilityIdDto;
+import dto.utility.UtilityUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.annotation.Collation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Collation
+@Controller
 @RequestMapping("/city-admin")
 public class CityAdminController {
 
@@ -37,11 +47,11 @@ public class CityAdminController {
     private UtilityService utilityService;
 
 
-    /// oun city info
+    /// own city info
     @GetMapping("/city")
     public ResponseEntity<?> getCity(){
         String Email = SecurityContextHolder.getContext().getAuthentication().getName();
-        City cityInfo = cityService.getCityInfoAdmin(Email);
+        CityDto cityInfo = cityService.getCityInfoAdmin(Email);
         if(cityInfo != null) {
             return new ResponseEntity<>(cityInfo, HttpStatus.OK);
         }
@@ -51,17 +61,18 @@ public class CityAdminController {
 
     /// Utility
     @GetMapping("/get-utility")
-    public ResponseEntity<?> getUtility(@RequestBody String utilityName){
-        Utility utility = utilityService.utilityInfo(utilityName);
+    public ResponseEntity<?> getUtility(@RequestBody UtilityIdDto utilityId){
+        Utility utility = utilityService.utilityInfo(utilityId.getUtilityId());
         if(utility != null){
             return new ResponseEntity<>(utility, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/post-utility/{cityId}")
-    public ResponseEntity<?> newUtility(@RequestBody Utility utility,@PathVariable String cityId){
-        boolean response = utilityService.newutility(utility, cityId);
+    @PostMapping("/post-utility")
+    public ResponseEntity<?> newUtility(@RequestBody UtilityDto utility){
+        String cityAdminEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean response = utilityService.newutility(utility, cityAdminEmail);
         if(response) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
@@ -70,7 +81,7 @@ public class CityAdminController {
 
 
     @PutMapping("/update-utility")
-    public ResponseEntity<?> updateUtility(@RequestBody Utility utility){
+    public ResponseEntity<?> updateUtility(@RequestBody UtilityUpdateDto utility){
         boolean response = utilityService.updateutility(utility);
 
         if(response) {
@@ -80,8 +91,8 @@ public class CityAdminController {
     }
 
     @DeleteMapping("/delete-utility")
-    public ResponseEntity<?> deleteUtility(@RequestBody String utilityId){
-        boolean response = utilityService.deleteutility(utilityId);
+    public ResponseEntity<?> deleteUtility(@RequestBody UtilityIdDto utilityId){
+        boolean response = utilityService.deleteutility(utilityId.getUtilityId());
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -99,9 +110,10 @@ public class CityAdminController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/post-hospital/{cityId}")
-    public ResponseEntity<?> newHospital(@RequestBody Hospital hospital,@PathVariable String cityId){
-        boolean response = hospitalService.newHospital(hospital, cityId);
+    @PostMapping("/post-hospital")
+    public ResponseEntity<?> newHospital(@RequestBody HospitalDto hospitalDto){
+        String cityAdminEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean response = hospitalService.newHospital(hospitalDto, cityAdminEmail);
         if(response) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
@@ -110,8 +122,8 @@ public class CityAdminController {
 
 
     @PutMapping("/update-hospital")
-    public ResponseEntity<?> updateHospital(@RequestBody Hospital hospital){
-        boolean response = hospitalService.updateHospital(hospital);
+    public ResponseEntity<?> updateHospital(@RequestBody HospitalDto hospitalDto){
+        boolean response = hospitalService.updateHospital(hospitalDto);
 
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -119,9 +131,9 @@ public class CityAdminController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/add-facility/{hospitalName}")
-    public ResponseEntity<?> addFacility(@PathVariable String hospitalName, @RequestBody String facility){
-        boolean response = hospitalService.addFacility(hospitalName, facility);
+    @PutMapping("/add-facility")
+    public ResponseEntity<?> addFacility(@RequestBody HospitalFacilityDto hospitalFacilityDto){
+        boolean response = hospitalService.addFacility(hospitalFacilityDto);
 
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -129,9 +141,9 @@ public class CityAdminController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/remove-facility/{hospitalName}")
-    public ResponseEntity<?> removeFacility(@PathVariable String hospitalName, @RequestBody String facility){
-        boolean response = hospitalService.deleteFacility(hospitalName, facility);
+    @DeleteMapping("/remove-facility")
+    public ResponseEntity<?> removeFacility(@RequestBody HospitalFacilityDto hospitalFacilityDto){
+        boolean response = hospitalService.deleteFacility(hospitalFacilityDto);
 
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -140,8 +152,8 @@ public class CityAdminController {
     }
 
     @DeleteMapping("/delete-hospital")
-    public ResponseEntity<?> deleteHospital(@RequestBody String hospitalId){
-        boolean response = hospitalService.deleteHospital(hospitalId);
+    public ResponseEntity<?> deleteHospital(@RequestBody HospitalIdDto hospitalIdDto){
+        boolean response = hospitalService.deleteHospital(hospitalIdDto.getHospitalId());
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -150,17 +162,18 @@ public class CityAdminController {
 
     /// school
     @GetMapping("/get-school")
-    public ResponseEntity<?> getSchool(@RequestBody String utilityName){
-        School school = schoolService.schoolInfo(utilityName);
+    public ResponseEntity<?> getSchool(@RequestBody SchoolNameDto schoolNameDto){
+        School school = schoolService.schoolInfo(schoolNameDto.getSchoolName());
         if(school != null){
             return new ResponseEntity<>(school, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/post-school/{cityId}")
-    public ResponseEntity<?> newSchool(@RequestBody School school,@PathVariable String cityId){
-        boolean response = schoolService.newSchool(school, cityId);
+    @PostMapping("/post-school")
+    public ResponseEntity<?> newSchool(@RequestBody SchoolDto schoolDto){
+        String admainEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean response = schoolService.newSchool(schoolDto, admainEmail);
         if(response) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
@@ -169,8 +182,8 @@ public class CityAdminController {
 
 
     @PutMapping("/update-school")
-    public ResponseEntity<?> updateSchool(@RequestBody School school){
-        boolean response = schoolService.updateSchool(school);
+    public ResponseEntity<?> updateSchool(@RequestBody SchoolDto schoolDto){
+        boolean response = schoolService.updateSchool(schoolDto);
 
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -179,8 +192,8 @@ public class CityAdminController {
     }
 
     @DeleteMapping("/delete-school")
-    public ResponseEntity<?> deleteSchool(@RequestBody String schoolId){
-        boolean response = schoolService.deleteSchool(schoolId);
+    public ResponseEntity<?> deleteSchool(@RequestBody SchoolIdDto schoolIdDto){
+        boolean response = schoolService.deleteSchool(schoolIdDto.getSchoolId());
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -234,7 +247,7 @@ public class CityAdminController {
     @PutMapping("/unblock-user/{userEmail}")
     public ResponseEntity<?> unblockUser(@PathVariable String userEmail){
         String emailCityAdmin = SecurityContextHolder.getContext().getAuthentication().getName();
-        boolean response = cityAdminService.toSuspend(emailCityAdmin, userEmail);
+        boolean response = cityAdminService.toResume(emailCityAdmin, userEmail);
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
         }

@@ -1,11 +1,10 @@
 package com.smart.city.SmartCityInformationPortal.controllers;
 
-import Component.DemoUser;
-import Component.UserLogin;
-import com.smart.city.SmartCityInformationPortal.entities.City;
-import com.smart.city.SmartCityInformationPortal.entities.User;
+import dto.user.TokenResponseDto;
+import dto.user.UserLoginRequestDto;
 import com.smart.city.SmartCityInformationPortal.services.CityService;
 import com.smart.city.SmartCityInformationPortal.services.UserService;
+import dto.user.UserRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +21,11 @@ public class PublicController {
     @Autowired
     private CityService cityService;
 
-    @PostMapping("/signup/{cityId}")
-    public ResponseEntity<?> signup(@RequestBody User user, @PathVariable String cityId){
-        boolean check = userService.saveUser(user);
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody UserRequestDto user){
+        boolean check = userService.checkUser(user);
         if(check){
-            boolean response = userService.saveNewUser(user, cityId);
+            boolean response = userService.saveNewUser(user);
             if(response){
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
@@ -36,23 +35,14 @@ public class PublicController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLogin userLogin){
+    public ResponseEntity<?> login(@RequestBody UserLoginRequestDto userLoginRequestDto){
 
-        DemoUser response = userService.saveUser(userLogin);
+        TokenResponseDto response = userService.loginToken(userLoginRequestDto);
 
         if(response != null){
             return new ResponseEntity<>(response,HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-    }
-
-    @PostMapping("/city")
-    public ResponseEntity<?> createCity(@RequestBody City city){
-        boolean response = cityService.newCity(city.getCityName());
-        if(response){
-            return new ResponseEntity<>(response,HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
 }

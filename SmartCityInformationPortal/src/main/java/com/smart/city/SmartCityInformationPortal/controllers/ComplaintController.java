@@ -1,6 +1,7 @@
 package com.smart.city.SmartCityInformationPortal.controllers;
 
-import Component.UpdateTitleOrDescription;
+import dto.complaint.ComplaintDto;
+import dto.complaint.UpdateTitleOrDescription;
 import com.smart.city.SmartCityInformationPortal.entities.Complaint;
 import com.smart.city.SmartCityInformationPortal.services.ComplaintService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class ComplaintController {
     private ComplaintService complaintService;
 
     @PostMapping
-    public ResponseEntity<?> newComplaint(@RequestBody Complaint complaint){
+    public ResponseEntity<?> newComplaint(@RequestBody ComplaintDto complaint){
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean response = complaintService.createComplaint(complaint, email);
@@ -51,6 +52,6 @@ public class ComplaintController {
         if(response != null){
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

@@ -1,13 +1,20 @@
 package com.smart.city.SmartCityInformationPortal.services;
 
-import Component.*;
+import com.smart.city.SmartCityInformationPortal.security.JWTUtil;
+import com.smart.city.SmartCityInformationPortal.services.Impl.UserDetailServiceImp;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.User;
 import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
 import com.smart.city.SmartCityInformationPortal.repository.UserRepository;
+import dto.complaint.UpdateGmailOrUserName;
+import dto.user.*;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,11 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
 public class UserService {
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     private UserRepository userRepository;
@@ -27,19 +36,29 @@ public class UserService {
     @Autowired
     private CityRepository cityRepository;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailServiceImp userDetailServiceImp;
+
+    @Autowired
+    private JWTUtil jwtUtil;
+
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     /// new user
     @Transactional
-    public boolean saveNewUser(User newUser, String cityId){
+    public boolean saveNewUser(UserRequestDto newUser){
         try {
-            Optional<City> city = cityRepository.findById(cityId);
-            newUser.setPassword(PASSWORD_ENCODER.encode(newUser.getPassword()));
-            newUser.setSuspend(false);
-            newUser.setRoll(Arrays.asList("USER"));
-            User saved = userRepository.save(newUser);
-            city.get().getCityUsers().add(saved);
-            cityRepository.save(city.get());
+            City city = cityRepository.findByCityName(newUser.getCity()).orElseThrow();
+            User user = modelMapper.map(newUser, User.class);
+            user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
+            user.setSuspend(false);
+            user.setRoll(Arrays.asList("USER"));
+            User saved = userRepository.save(user);
+            city.getCityUsers().add(saved);
+            cityRepository.save(city);
             return true;
         } catch (Exception e) {
             log.error("Exception in User Service",e);
@@ -47,36 +66,37 @@ public class UserService {
         }
     }
 
-    /// check user
-    public boolean saveUser(User user){
+    /// check user exist
+    public boolean checkUser(UserRequestDto user){
         User checkUser = userRepository.findByEmail(user.getEmail());
-        if(!checkUser.getEmail().equals(user.getEmail())){
+        if(checkUser == null){
             return true;
         }
         return false;
     }
 
-    public DemoUser saveUser(UserLogin userLogin){
-        DemoUser demoUser = null;
-        User checkUser = userRepository.findByEmail(userLogin.getEmail());
-        boolean matches = PASSWORD_ENCODER.matches(userLogin.getPassword(), checkUser.getPassword());
-        if(checkUser.getEmail().equals(userLogin.getEmail()) && matches){
-            demoUser.setName(checkUser.getName());
-            demoUser.setPhone(checkUser.getPhone());
-            demoUser.setCity(checkUser.getCity());
-            demoUser.setEmail(checkUser.getEmail());
-            demoUser.setAddress(checkUser.getAddress());
-            return demoUser;
+    ///  here i use jwt token
+    public TokenResponseDto loginToken(UserLoginRequestDto userLoginRequestDto){
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            userLoginRequestDto.getEmail(),userLoginRequestDto.getPassword()));
+            UserDetails userDetails = userDetailServiceImp.loadUserByUsername(userLoginRequestDto.getEmail());
+            String jwtToken = jwtUtil.generateAccessToken(userDetails.getUsername());
+            TokenResponseDto tokenResponseDto = new TokenResponseDto();
+            tokenResponseDto.setJwtToken(jwtToken);
+                return tokenResponseDto;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return demoUser;
     }
 
     /// update password
-    public boolean updatePassword(PasswordReset passwordReset){
+    public boolean updatePassword(PasswordResetDto passwordResetDto){
         String Email = SecurityContextHolder.getContext().getAuthentication().getName();
         User existingUser = userRepository.findByEmail(Email);
-        boolean existingPassword = PASSWORD_ENCODER.matches(passwordReset.getOldPassword(),existingUser.getPassword());
-        String encodeNewPassword = PASSWORD_ENCODER.encode(passwordReset.getNewPassword());
+        boolean existingPassword = PASSWORD_ENCODER.matches(passwordResetDto.getOldPassword(),existingUser.getPassword());
+        String encodeNewPassword = PASSWORD_ENCODER.encode(passwordResetDto.getNewPassword());
         if(existingPassword){
             existingUser.setPassword(encodeNewPassword);
             userRepository.save(existingUser);
@@ -126,22 +146,11 @@ public class UserService {
         }
     }
 
-    public boolean updatePassword(PasswordReset passwordReset, String Email){
-        User existingUser = userRepository.findByEmail(Email);
-        boolean existingPassword = PASSWORD_ENCODER.matches(passwordReset.getOldPassword(),existingUser.getPassword());
-        String encodeNewPassword = PASSWORD_ENCODER.encode(passwordReset.getNewPassword());
-        if(existingPassword){
-            existingUser.setPassword(encodeNewPassword);
-            userRepository.save(existingUser);
-            return true;
-        }
-        return false;
-    }
 
     /// get info of user
-    public responceUser getInfoAdmin(String Email) {
+    public UserDto getInfoAdmin(String Email) {
 
-        responceUser demoUser = new responceUser();
+        UserDto demoUser = new UserDto();
         User user = userRepository.findByEmail(Email);
         userRepository.findAll();
         if(user != null) {
@@ -156,12 +165,12 @@ public class UserService {
     }
 
     /// get info of user
-    public User getInfo(String Email) {
+    public UserDto getInfo(String Email) {
         User user = userRepository.findByEmail(Email);
         if(user != null) {
-           return user;
+           return modelMapper.map(user, UserDto.class);
         }
-        return user;
+        return null;
     }
 
 

@@ -74,10 +74,11 @@ public class AdminService {
 
         List<String> cityAdmin = admin.getRoll().stream().filter(x -> x.toUpperCase().equals("ADMIN")).collect(Collectors.toList());
 
-        if(cityAdmin != null){
+        if(cityAdmin != null && !email.equals(emailAdmin)){
             if (user != null){
                 user.setSuspend(true);
                 userRepository.save(user);
+                return true;
             }
         }
         return false;
@@ -89,10 +90,11 @@ public class AdminService {
 
         List<String> cityAdmin = admin.getRoll().stream().filter(x -> x.toUpperCase().equals("ADMIN")).collect(Collectors.toList());
 
-        if(cityAdmin != null){
+        if(cityAdmin != null && !email.equals(emailAdmin)){
             if (user != null){
                 user.setSuspend(false);
                 userRepository.save(user);
+                return true;
             }
         }
         return false;

@@ -3,10 +3,13 @@ package com.smart.city.SmartCityInformationPortal.entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.annotation.Collation;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +19,8 @@ import java.util.List;
 
 @Document(collection = "user")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @JsonProperty("_id")
@@ -28,8 +33,10 @@ public class User {
     private String password;
     @NonNull
     private String name;
+
+    private String phone;
     @NonNull
-    private int phone;
+    private String idProof;
     private String address;
     @NonNull
     private String city;
