@@ -1,7 +1,7 @@
 package com.smart.city.SmartCityInformationPortal.controllers;
 
-import dto.complaint.ComplaintDto;
-import dto.complaint.UpdateTitleOrDescription;
+import com.smart.city.SmartCityInformationPortal.dto.complaint.ComplaintDto;
+import com.smart.city.SmartCityInformationPortal.dto.complaint.UpdateTitleOrDescription;
 import com.smart.city.SmartCityInformationPortal.entities.Complaint;
 import com.smart.city.SmartCityInformationPortal.services.ComplaintService;
 import org.springframework.beans.factory.annotation.Autowired;

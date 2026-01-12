@@ -1,13 +1,13 @@
 package com.smart.city.SmartCityInformationPortal.services;
 
+import com.smart.city.SmartCityInformationPortal.dto.user.*;
 import com.smart.city.SmartCityInformationPortal.security.JWTUtil;
 import com.smart.city.SmartCityInformationPortal.services.Impl.UserDetailServiceImp;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.User;
 import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
 import com.smart.city.SmartCityInformationPortal.repository.UserRepository;
-import dto.complaint.UpdateGmailOrUserName;
-import dto.user.*;
+import com.smart.city.SmartCityInformationPortal.dto.complaint.UpdateGmailOrUserName;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

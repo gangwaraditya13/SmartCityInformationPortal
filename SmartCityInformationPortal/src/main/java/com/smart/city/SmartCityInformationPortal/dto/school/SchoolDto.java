@@ -1,4 +1,4 @@
-package dto.school;
+package com.smart.city.SmartCityInformationPortal.dto.school;
 
 import com.smart.city.SmartCityInformationPortal.selectDataEnum.InstitutionCategory;
 import com.smart.city.SmartCityInformationPortal.selectDataEnum.OwnershipType;

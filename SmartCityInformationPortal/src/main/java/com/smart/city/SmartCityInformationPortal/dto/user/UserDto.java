@@ -1,4 +1,4 @@
-package dto.user;
+package com.smart.city.SmartCityInformationPortal.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

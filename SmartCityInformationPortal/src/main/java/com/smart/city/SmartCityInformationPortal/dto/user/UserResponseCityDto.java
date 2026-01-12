@@ -1,4 +1,4 @@
-package dto.user;
+package com.smart.city.SmartCityInformationPortal.dto.user;
 
 import com.smart.city.SmartCityInformationPortal.entities.Hospital;
 import com.smart.city.SmartCityInformationPortal.entities.School;

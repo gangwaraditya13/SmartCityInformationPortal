@@ -2,9 +2,9 @@ package com.smart.city.SmartCityInformationPortal.controllers;
 
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.services.*;
-import dto.city.CityDto;
-import dto.city.CityNameDot;
-import dto.city.CityResponseDto;
+import com.smart.city.SmartCityInformationPortal.dto.city.CityDto;
+import com.smart.city.SmartCityInformationPortal.dto.city.CityNameDot;
+import com.smart.city.SmartCityInformationPortal.dto.city.CityResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

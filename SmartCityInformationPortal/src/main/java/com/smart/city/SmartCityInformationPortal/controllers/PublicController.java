@@ -1,10 +1,10 @@
 package com.smart.city.SmartCityInformationPortal.controllers;
 
-import dto.user.TokenResponseDto;
-import dto.user.UserLoginRequestDto;
+import com.smart.city.SmartCityInformationPortal.dto.user.TokenResponseDto;
+import com.smart.city.SmartCityInformationPortal.dto.user.UserLoginRequestDto;
 import com.smart.city.SmartCityInformationPortal.services.CityService;
 import com.smart.city.SmartCityInformationPortal.services.UserService;
-import dto.user.UserRequestDto;
+import com.smart.city.SmartCityInformationPortal.dto.user.UserRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

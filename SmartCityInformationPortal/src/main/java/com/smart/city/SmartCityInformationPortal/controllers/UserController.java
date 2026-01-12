@@ -2,12 +2,12 @@ package com.smart.city.SmartCityInformationPortal.controllers;
 
 import com.smart.city.SmartCityInformationPortal.services.CityService;
 import com.smart.city.SmartCityInformationPortal.services.UserService;
-import dto.city.CityNameDot;
-import dto.complaint.UpdateGmailOrUserName;
-import dto.user.PasswordResetDto;
-import dto.user.RequestPasswordDot;
-import dto.user.UserDto;
-import dto.user.UserResponseCityDto;
+import com.smart.city.SmartCityInformationPortal.dto.city.CityNameDot;
+import com.smart.city.SmartCityInformationPortal.dto.complaint.UpdateGmailOrUserName;
+import com.smart.city.SmartCityInformationPortal.dto.user.PasswordResetDto;
+import com.smart.city.SmartCityInformationPortal.dto.user.RequestPasswordDot;
+import com.smart.city.SmartCityInformationPortal.dto.user.UserDto;
+import com.smart.city.SmartCityInformationPortal.dto.user.UserResponseCityDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,14 +1,12 @@
-package dto.complaint;
+package com.smart.city.SmartCityInformationPortal.dto.city;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class UpdateGmailOrUserName {
+@AllArgsConstructor
+public class CityNameDot {
     private String name;
-    private String email;
-    private String address;
 }

@@ -1,4 +1,4 @@
-package dto.user;
+package com.smart.city.SmartCityInformationPortal.dto.user;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;

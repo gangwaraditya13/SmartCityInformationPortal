@@ -1,4 +1,4 @@
-package dto.hospital;
+package com.smart.city.SmartCityInformationPortal.dto.utility;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HospitalIdDto {
-    private String hospitalId;
+public class UtilityIdDto {
+    private String utilityId;
 }

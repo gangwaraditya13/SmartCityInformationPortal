@@ -1,11 +1,11 @@
 package com.smart.city.SmartCityInformationPortal.services;
 
-import dto.city.CityDto;
-import dto.city.CityResponseDto;
-import dto.user.UserDto;
+import com.smart.city.SmartCityInformationPortal.dto.city.CityDto;
+import com.smart.city.SmartCityInformationPortal.dto.city.CityResponseDto;
+import com.smart.city.SmartCityInformationPortal.dto.user.UserDto;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
-import dto.user.UserResponseCityDto;
+import com.smart.city.SmartCityInformationPortal.dto.user.UserResponseCityDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package dto.hospital;
+package com.smart.city.SmartCityInformationPortal.dto.hospital;
 
 
 import jakarta.validation.constraints.Pattern;

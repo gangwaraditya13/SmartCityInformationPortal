@@ -6,7 +6,7 @@ import com.smart.city.SmartCityInformationPortal.entities.User;
 import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
 import com.smart.city.SmartCityInformationPortal.repository.SchoolRepository;
 import com.smart.city.SmartCityInformationPortal.repository.UserRepository;
-import dto.school.SchoolDto;
+import com.smart.city.SmartCityInformationPortal.dto.school.SchoolDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
