@@ -32,7 +32,7 @@ public class JWTUtil{
                 .claims(claims)
                 .subject(email)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()+(1000*60*60)))
+                .expiration(new Date(System.currentTimeMillis()+(1000*60*60*60)))
                 .signWith(getsecretKey()).compact();
     }
 

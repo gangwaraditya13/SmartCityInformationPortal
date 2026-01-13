@@ -30,19 +30,20 @@ public class UtilityService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Transactional
-    public boolean newutility(UtilityDto newutility, String cityAdminEmail){
+    public Utility newutility(UtilityDto newutility, String cityAdminEmail){
+
         try{
             User cityAdmin = userRepository.findByEmail(cityAdminEmail);
+            City city = cityRepository.findByCityName(cityAdmin.getCity()).orElseThrow();
             Utility utility = modelMapper.map(newutility, Utility.class);
             Utility saved = utilityRepository.save(utility);
-            City city = cityRepository.findById(cityAdmin.getCity()).orElseThrow();
             city.getCityUtilities().add(saved);
             cityRepository.save(city);
-            return true;
+            return saved;
         } catch (Exception e) {
-            return false;
+            System.err.println("on saving new utility "+e.getMessage());
         }
+        return null;
     }
 
     @Transactional

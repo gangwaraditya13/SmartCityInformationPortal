@@ -2,6 +2,7 @@ package com.smart.city.SmartCityInformationPortal.services;
 
 import com.smart.city.SmartCityInformationPortal.dto.user.*;
 import com.smart.city.SmartCityInformationPortal.security.JWTUtil;
+import com.smart.city.SmartCityInformationPortal.selectDataEnum.Roles;
 import com.smart.city.SmartCityInformationPortal.services.Impl.UserDetailServiceImp;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.User;
@@ -55,7 +56,7 @@ public class UserService {
             User user = modelMapper.map(newUser, User.class);
             user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
             user.setSuspend(false);
-            user.setRoll(Arrays.asList("USER"));
+            user.setRoll(Arrays.asList(Roles.USER.toString()));
             User saved = userRepository.save(user);
             city.getCityUsers().add(saved);
             cityRepository.save(city);

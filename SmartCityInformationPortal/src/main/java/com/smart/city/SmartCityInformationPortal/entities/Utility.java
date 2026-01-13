@@ -19,11 +19,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Utility {
     @JsonProperty("_id")
     @JsonSerialize(using = ToStringSerializer.class)
+    @Indexed
     private ObjectId id;
     @NonNull
-    @Indexed(unique = true)
     private UtilityDepartment utilityDepartment; //Garbage, Road, Water, Electricity,e.t.c
     @NonNull
+    @Indexed(unique = true)
     private String utilityContact;
     @NonNull
     private String utilityAddress;

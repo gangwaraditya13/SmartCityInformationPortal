@@ -6,6 +6,7 @@ import com.smart.city.SmartCityInformationPortal.dto.user.UserDto;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
 import com.smart.city.SmartCityInformationPortal.dto.user.UserResponseCityDto;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class CityService {
 
@@ -56,8 +58,7 @@ public class CityService {
     }
 
     public UserResponseCityDto getOwnCityInfo(String cityName){
-        City city = cityRepository.findByCityName(cityName).orElseThrow();
-
+        Optional<City> city = cityRepository.findByCityName(cityName);
         return modelMapper.map(city, UserResponseCityDto.class);
     }
 

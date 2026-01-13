@@ -78,8 +78,8 @@ public class AdminController {
     }
 
     @PostMapping("/new-city")
-    public ResponseEntity<?> createCity(@RequestBody City city){
-        CityDto response = cityService.newCity(city.getCityName());
+    public ResponseEntity<?> createCity(@RequestBody CityNameDot cityNameDot){
+        CityDto response = cityService.newCity(cityNameDot.getName());
         if(response != null){
             return new ResponseEntity<>(response,HttpStatus.OK);
         }

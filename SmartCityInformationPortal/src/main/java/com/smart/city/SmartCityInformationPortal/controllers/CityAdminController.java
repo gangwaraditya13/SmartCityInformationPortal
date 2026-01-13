@@ -72,9 +72,9 @@ public class CityAdminController {
     @PostMapping("/post-utility")
     public ResponseEntity<?> newUtility(@RequestBody UtilityDto utility){
         String cityAdminEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        boolean response = utilityService.newutility(utility, cityAdminEmail);
-        if(response) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
+        Utility response = utilityService.newutility(utility, cityAdminEmail);
+        if(response != null) {
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

@@ -23,6 +23,8 @@ public class UserDto {
     private String email;
     private String phone;
     private String idProof;
+    private String profilePhotoURL;
+    private String profileProductId;
     private String address;
     private String city;
     private boolean suspend;

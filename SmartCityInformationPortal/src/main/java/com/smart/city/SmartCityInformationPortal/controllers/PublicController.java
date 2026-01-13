@@ -1,5 +1,7 @@
 package com.smart.city.SmartCityInformationPortal.controllers;
 
+import com.smart.city.SmartCityInformationPortal.dto.city.CityDto;
+import com.smart.city.SmartCityInformationPortal.dto.city.CityNameDot;
 import com.smart.city.SmartCityInformationPortal.dto.user.TokenResponseDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.UserLoginRequestDto;
 import com.smart.city.SmartCityInformationPortal.services.CityService;
@@ -44,5 +46,6 @@ public class PublicController {
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+
 
 }

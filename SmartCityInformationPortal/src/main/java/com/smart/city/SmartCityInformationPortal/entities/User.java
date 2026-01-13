@@ -37,6 +37,8 @@ public class User {
     private String phone;
     @NonNull
     private String idProof;
+    private String profilePhotoURL;
+    private String profileProductId;
     private String address;
     @NonNull
     private String city;

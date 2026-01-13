@@ -11,6 +11,7 @@ import com.smart.city.SmartCityInformationPortal.dto.hospital.HospitalDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,13 +32,14 @@ public class HospitalService {
     @Autowired
     private UserRepository userRepository;
 
+
     public boolean newHospital(HospitalDto hospitalDto, String cityAdminEmail){
         User cityAdmin = userRepository.findByEmail(cityAdminEmail);
         Hospital checkSchool = hospitalRepository.findByHospitalName(hospitalDto.getHospitalName());
         if(checkSchool==null){
             Hospital hospital = modelMapper.map(hospitalDto, Hospital.class);
-            Hospital saved = hospitalRepository.save(hospital);
             City city = cityRepository.findByCityName(cityAdmin.getCity()).orElseThrow();
+            Hospital saved = hospitalRepository.save(hospital);
             city.getCityHospitals().add(saved);
             cityRepository.save(city);
             return true;
@@ -45,6 +47,7 @@ public class HospitalService {
         return false;
     }
 
+    @Transactional
     public boolean updateHospital(HospitalDto hospitalDto){
         boolean anyChange = false;
         Hospital checkHospital = hospitalRepository.findByHospitalName(hospitalDto.getHospitalName());
@@ -68,6 +71,7 @@ public class HospitalService {
         return anyChange;
     }
 
+    @Transactional
     public boolean addFacility(HospitalFacilityDto hospitalFacilityDto){
         Hospital checkHospital = hospitalRepository.findByHospitalName(hospitalFacilityDto.getHospitalName());
         List<String> collect = checkHospital.getHospitalFacilities().stream().filter(x -> x.equals(hospitalFacilityDto.getFacility())).collect(Collectors.toList());

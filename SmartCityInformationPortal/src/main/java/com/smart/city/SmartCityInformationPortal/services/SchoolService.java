@@ -36,7 +36,7 @@ public class SchoolService {
         if(checkSchool==null){
             School school = modelMapper.map(newSchoolDto, School.class);
             School saved = schoolRepository.save(school);
-            Optional<City> city = cityRepository.findById(cityAdmin.getCity());
+            Optional<City> city = cityRepository.findByCityName(cityAdmin.getCity());
             city.get().getCitySchools().add(saved);
             cityRepository.save(city.get());
             return true;

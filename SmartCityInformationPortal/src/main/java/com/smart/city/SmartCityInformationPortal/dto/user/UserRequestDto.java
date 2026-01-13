@@ -14,17 +14,21 @@ public class UserRequestDto {
             message = "Invalid email address"
     )
     private String email;
+    private String password;
     private String name;
     @Pattern(
             regexp = "^(\\+91|0)?[6-9]\\d{9}$",
             message = "Invalid Indian mobile number"
     )
-    private Long phone;
+    private String phone;
     @Pattern(
             regexp = "^[2-9]\\d{11}$",
             message = "Invalid Aadhaar number"
     )
-    private Long idProof;
+
+    private String idProof;
+    private String profilePhotoURL;
+    private String profileProductId;
     private String address;
     private String city;
 }
