@@ -36,6 +36,7 @@ public class User {
 
     private String phone;
     @NonNull
+    @Indexed(unique = true)
     private String idProof;
     private String profilePhotoURL;
     private String profileProductId;
