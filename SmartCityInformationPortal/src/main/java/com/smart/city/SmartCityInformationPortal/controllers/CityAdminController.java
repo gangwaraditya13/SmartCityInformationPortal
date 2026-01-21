@@ -60,7 +60,7 @@ public class CityAdminController {
 
 
     /// Utility
-    @GetMapping("/get-utility")
+    @PostMapping("/get-utility")
     public ResponseEntity<?> getUtility(@RequestBody UtilityIdDto utilityId){
         Utility utility = utilityService.utilityInfo(utilityId.getUtilityId());
         if(utility != null){
@@ -101,7 +101,7 @@ public class CityAdminController {
 
     /// Hospital
 
-    @GetMapping("/get-hospital")
+    @PostMapping("/get-hospital")
     public ResponseEntity<?> getHospital(@RequestBody String hospitalName){
         Hospital hospital = hospitalService.hospitalInfo(hospitalName);
         if(hospital != null){
@@ -161,7 +161,7 @@ public class CityAdminController {
     }
 
     /// school
-    @GetMapping("/get-school")
+    @PostMapping("/get-school")
     public ResponseEntity<?> getSchool(@RequestBody SchoolNameDto schoolNameDto){
         School school = schoolService.schoolInfo(schoolNameDto.getSchoolName());
         if(school != null){

@@ -1,7 +1,6 @@
 package com.smart.city.SmartCityInformationPortal.controllers;
 
-import com.smart.city.SmartCityInformationPortal.dto.city.CityDto;
-import com.smart.city.SmartCityInformationPortal.dto.city.CityNameDot;
+import com.smart.city.SmartCityInformationPortal.dto.user.SearchCityDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.TokenResponseDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.UserLoginRequestDto;
 import com.smart.city.SmartCityInformationPortal.services.CityService;
@@ -36,7 +35,7 @@ public class PublicController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginRequestDto userLoginRequestDto){
 
         TokenResponseDto response = userService.loginToken(userLoginRequestDto);
@@ -47,5 +46,11 @@ public class PublicController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
+    @GetMapping("/city/{name}")
+    public ResponseEntity<?> getHintCity(@PathVariable String name){
+        SearchCityDto cityByHint = cityService.getCityByHint(name);
+
+        return new ResponseEntity<>(cityByHint,HttpStatus.OK);
+    }
 
 }

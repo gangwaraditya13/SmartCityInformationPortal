@@ -54,10 +54,10 @@ public class ComplaintService {
     }
 
 
-    public boolean updateComplaint(UpdateTitleOrDescription complaint, String complaintId){
+    public boolean updateComplaint(UpdateTitleOrDescription complaint){
         boolean anyChange = false;
         try {
-            Complaint findComplaint = complaintRepository.findById(complaintId);
+            Complaint findComplaint = complaintRepository.findById(complaint.getId());
             if(findComplaint != null) {
                 if(findComplaint.getComplaintDescription() != complaint.getDescription()){
                     findComplaint.setComplaintDescription(complaint.getDescription());

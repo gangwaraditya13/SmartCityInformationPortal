@@ -3,6 +3,7 @@ package com.smart.city.SmartCityInformationPortal.dto.user;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.smart.city.SmartCityInformationPortal.entities.Complaint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,4 +30,5 @@ public class UserDto {
     private String city;
     private boolean suspend;
     private List<String> roll = new ArrayList<>();
+    private List<Complaint> complaintList = new ArrayList<>();
 }

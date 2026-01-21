@@ -28,9 +28,9 @@ public class ComplaintController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/update-complaint/{complaintId}")
+    @PutMapping("/update-complaint")
     public ResponseEntity<?> updateComplaint(@RequestBody UpdateTitleOrDescription updateTitleOrDescription, @PathVariable String complaintId){
-        boolean response = complaintService.updateComplaint(updateTitleOrDescription, complaintId);
+        boolean response = complaintService.updateComplaint(updateTitleOrDescription);
         if(response){
             return new ResponseEntity<>(HttpStatus.CREATED);
         }

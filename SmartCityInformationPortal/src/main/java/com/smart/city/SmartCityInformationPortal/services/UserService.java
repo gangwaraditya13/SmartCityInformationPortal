@@ -8,7 +8,7 @@ import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.User;
 import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
 import com.smart.city.SmartCityInformationPortal.repository.UserRepository;
-import com.smart.city.SmartCityInformationPortal.dto.complaint.UpdateGmailOrUserName;
+import com.smart.city.SmartCityInformationPortal.dto.user.UpdateGmailOrUserName;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,30 +107,30 @@ public class UserService {
     }
 
     /// update email, address, and name
+    @Transactional
     public boolean updateUser(UpdateGmailOrUserName user, String Email) {
         boolean anyChange = false;
 
         User existingUser = userRepository.findByEmail(Email);
-        if(existingUser.getEmail() == null || !existingUser.getEmail().equals(user.getEmail())){
+        if(!existingUser.getEmail().equals(user.getEmail())){
             existingUser.setEmail(user.getEmail());
             userRepository.save(existingUser);
             anyChange = true;
         }
-        if(!existingUser.getName().equals(user.getEmail())){
-            User checkUser = userRepository.findByEmail(user.getEmail());
-            if(checkUser == null){
-                existingUser.setName(user.getEmail());
+        if(!existingUser.getName().equals(user.getName())){
+                existingUser.setName(user.getName());
                 userRepository.save(existingUser);
                 anyChange = true;
-            }
         }
-        if(existingUser.getEmail() == null || !existingUser.getAddress().equals(user.getAddress())){
-            User checkUser = userRepository.findByEmail(user.getEmail());
-            if(checkUser == null){
-                existingUser.setName(user.getEmail());
+        if(!existingUser.getAddress().equals(user.getAddress())){
+                existingUser.setAddress(user.getAddress());
                 userRepository.save(existingUser);
                 anyChange = true;
-            }
+        }
+        if(!existingUser.getPhone().equals(user.getPhone())){
+                existingUser.setPhone(user.getPhone());
+                userRepository.save(existingUser);
+                anyChange = true;
         }
         return anyChange;
     }

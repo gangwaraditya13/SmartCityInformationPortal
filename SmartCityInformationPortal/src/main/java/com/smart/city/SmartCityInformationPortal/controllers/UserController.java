@@ -3,7 +3,7 @@ package com.smart.city.SmartCityInformationPortal.controllers;
 import com.smart.city.SmartCityInformationPortal.services.CityService;
 import com.smart.city.SmartCityInformationPortal.services.UserService;
 import com.smart.city.SmartCityInformationPortal.dto.city.CityNameDot;
-import com.smart.city.SmartCityInformationPortal.dto.complaint.UpdateGmailOrUserName;
+import com.smart.city.SmartCityInformationPortal.dto.user.UpdateGmailOrUserName;
 import com.smart.city.SmartCityInformationPortal.dto.user.PasswordResetDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.RequestPasswordDot;
 import com.smart.city.SmartCityInformationPortal.dto.user.UserDto;
@@ -79,7 +79,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/other-city-info")
+    @PostMapping("/other-city-info")
     public ResponseEntity<?> getOtherCityInfo(@RequestBody CityNameDot cityNameDot){
 
         UserResponseCityDto ownCityInfo = cityService.getOwnCityInfo(cityNameDot.getName());

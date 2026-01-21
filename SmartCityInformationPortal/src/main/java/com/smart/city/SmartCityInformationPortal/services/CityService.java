@@ -2,6 +2,7 @@ package com.smart.city.SmartCityInformationPortal.services;
 
 import com.smart.city.SmartCityInformationPortal.dto.city.CityDto;
 import com.smart.city.SmartCityInformationPortal.dto.city.CityResponseDto;
+import com.smart.city.SmartCityInformationPortal.dto.user.SearchCityDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.UserDto;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.repository.CityRepository;
@@ -75,4 +76,16 @@ public class CityService {
         return allCity;
     }
 
+    public SearchCityDto getCityByHint(String name) {
+
+        List<String> listOfCitySearched = cityRepository
+                .findByCityNameStartingWithIgnoreCase(name)
+                .stream()
+                .map(City::getCityName)
+                .toList();
+        SearchCityDto searchCityDto = new SearchCityDto();
+        searchCityDto.setCityName(listOfCitySearched);
+
+        return searchCityDto;
+    }
 }
