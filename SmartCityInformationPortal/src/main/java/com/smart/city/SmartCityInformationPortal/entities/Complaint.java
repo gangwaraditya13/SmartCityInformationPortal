@@ -26,5 +26,6 @@ public class Complaint {
     @NonNull
     private String complaintCategory; //e.g: Garbage, Road, Water, Electricity,e.t.c
     private String complaintStatus;
-
+    private String profilePhotoURL;
+    private String profileProductId;
 }

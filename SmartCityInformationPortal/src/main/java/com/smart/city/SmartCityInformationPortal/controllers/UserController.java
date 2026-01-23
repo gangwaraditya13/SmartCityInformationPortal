@@ -1,8 +1,9 @@
 package com.smart.city.SmartCityInformationPortal.controllers;
 
 import com.smart.city.SmartCityInformationPortal.services.CityService;
+import com.smart.city.SmartCityInformationPortal.services.CloudinaryImageService;
 import com.smart.city.SmartCityInformationPortal.services.UserService;
-import com.smart.city.SmartCityInformationPortal.dto.city.CityNameDot;
+import com.smart.city.SmartCityInformationPortal.dto.city.CityNameDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.UpdateGmailOrUserName;
 import com.smart.city.SmartCityInformationPortal.dto.user.PasswordResetDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.RequestPasswordDot;
@@ -15,6 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -25,6 +29,9 @@ public class UserController {
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private CloudinaryImageService cloudinaryImageService;
 
     @GetMapping("/getuser")
     public ResponseEntity<UserDto> getUser(){
@@ -80,13 +87,24 @@ public class UserController {
     }
 
     @PostMapping("/other-city-info")
-    public ResponseEntity<?> getOtherCityInfo(@RequestBody CityNameDot cityNameDot){
+    public ResponseEntity<?> getOtherCityInfo(@RequestBody CityNameDto cityNameDto){
 
-        UserResponseCityDto ownCityInfo = cityService.getOwnCityInfo(cityNameDot.getName());
+        UserResponseCityDto ownCityInfo = cityService.getOwnCityInfo(cityNameDto.getName());
         if(ownCityInfo != null) {
             return new ResponseEntity<>(ownCityInfo,HttpStatus.OK);
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /// Image
+    @PostMapping("/image-upload")
+    public ResponseEntity<Map> uploadImage(@RequestParam("image") MultipartFile file){
+        Map data = cloudinaryImageService.uploadImage(file);
+        if(!data.isEmpty()) {
+            return new ResponseEntity<>(data, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

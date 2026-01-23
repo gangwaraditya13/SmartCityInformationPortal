@@ -13,4 +13,6 @@ public class ComplaintDto {
     private String complaintDescription;
     @NonNull
     private String complaintCategory; //e.g: Garbage, Road, Water, Electricity,e.t.c
+    private String profilePhotoURL;
+    private String profileProductId;
 }

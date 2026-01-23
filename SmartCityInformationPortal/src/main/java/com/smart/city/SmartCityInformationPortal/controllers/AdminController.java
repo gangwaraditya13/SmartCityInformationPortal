@@ -3,7 +3,7 @@ package com.smart.city.SmartCityInformationPortal.controllers;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.services.*;
 import com.smart.city.SmartCityInformationPortal.dto.city.CityDto;
-import com.smart.city.SmartCityInformationPortal.dto.city.CityNameDot;
+import com.smart.city.SmartCityInformationPortal.dto.city.CityNameDto;
 import com.smart.city.SmartCityInformationPortal.dto.city.CityResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,8 +78,8 @@ public class AdminController {
     }
 
     @PostMapping("/new-city")
-    public ResponseEntity<?> createCity(@RequestBody CityNameDot cityNameDot){
-        CityDto response = cityService.newCity(cityNameDot.getName());
+    public ResponseEntity<?> createCity(@RequestBody CityNameDto cityNameDto){
+        CityDto response = cityService.newCity(cityNameDto.getName());
         if(response != null){
             return new ResponseEntity<>(response,HttpStatus.OK);
         }
@@ -87,7 +87,7 @@ public class AdminController {
     }
 
     @PutMapping("/update-city-name/{cityId}")
-    public ResponseEntity<?> updateCity(@RequestBody CityNameDot cityName, @PathVariable String cityId){
+    public ResponseEntity<?> updateCity(@RequestBody CityNameDto cityName, @PathVariable String cityId){
         boolean response = cityService.updateCity(cityName.getName(), cityId);
         if(response){
             return new ResponseEntity<>(HttpStatus.OK);
