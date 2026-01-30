@@ -1,6 +1,8 @@
 package com.smart.city.SmartCityInformationPortal.services;
 
+import com.smart.city.SmartCityInformationPortal.dto.user.ImageUpdateRequestDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.*;
+import com.smart.city.SmartCityInformationPortal.entities.Complaint;
 import com.smart.city.SmartCityInformationPortal.security.JWTUtil;
 import com.smart.city.SmartCityInformationPortal.selectDataEnum.Roles;
 import com.smart.city.SmartCityInformationPortal.services.Impl.UserDetailServiceImp;
@@ -21,8 +23,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -45,6 +49,9 @@ public class UserService {
 
     @Autowired
     private JWTUtil jwtUtil;
+
+    @Autowired
+    private CloudinaryImageService cloudinaryImageService;
 
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
@@ -107,7 +114,6 @@ public class UserService {
     }
 
     /// update email, address, and name
-    @Transactional
     public boolean updateUser(UpdateGmailOrUserName user, String Email) {
         boolean anyChange = false;
 
@@ -135,13 +141,64 @@ public class UserService {
         return anyChange;
     }
 
+    /// Image profile pic
+    public boolean updateUser(ImageUpdateRequestDto imageUpdateRequestDto, String email){
+        boolean anyChange = true;
+        User existingUser = userRepository.findByEmail(email);
+        if( existingUser.getProfilePhotoURL() == null || existingUser.getProfilePhotoURL().isEmpty() || !existingUser.getProfilePhotoURL().equals(imageUpdateRequestDto.getProfilePhotoURL())){
+            existingUser.setProfilePhotoURL(imageUpdateRequestDto.getProfilePhotoURL());
+            userRepository.save(existingUser);
+            anyChange = true;
+        }
+
+        if( existingUser.getProfileProductId() == null || existingUser.getProfileProductId().isEmpty() || !existingUser.getProfileProductId().equals(imageUpdateRequestDto.getProfileProductId())){
+            existingUser.setProfileProductId(imageUpdateRequestDto.getProfileProductId());
+            userRepository.save(existingUser);
+            anyChange = true;
+        }
+
+        return anyChange;
+    }
+    public boolean deleteUserProfilePic(ImageUpdateRequestDto imageUpdateRequestDto,String email) {
+        User existingUser = userRepository.findByEmail(email);
+        try {
+            existingUser.setProfilePhotoURL(null);
+            existingUser.setProfileProductId(null);
+
+            cloudinaryImageService.deleteImage(imageUpdateRequestDto.getProfileProductId());
+
+            return true;
+        }catch (Exception e){
+            System.err.println("UserService in Image delete");
+        }
+        return false;
+    }
+
     /// delete user
     public boolean deleteUser(String password,String Email){
         User user = userRepository.findByEmail(Email);
         boolean userPassword = PASSWORD_ENCODER.matches(password,user.getPassword());
         if(userPassword){
-            userRepository.deleteByEmail(Email);
-            return true;
+            try {
+                Stream<Complaint> complaintHavingImage = user.getComplaintList()
+                        .stream()
+                        .filter(x -> Boolean.parseBoolean(x.getProfileProductId()));
+
+                List<String> complaintImageList = new ArrayList<>();
+
+                complaintHavingImage.forEach(complaint -> {
+                    complaintImageList.add(complaint.getProfileProductId());
+                });
+
+                cloudinaryImageService.deleteImages(complaintImageList);
+                userRepository.deleteByEmail(Email);
+                complaintImageList.clear();
+
+                return true;
+            }catch (Exception e){
+                System.err.println("User delete is fails : "+ e.getMessage());
+                return false;
+            }
         }else{
             return false;
         }
@@ -180,5 +237,6 @@ public class UserService {
         List<User> users = userRepository.findAll();
         return users;
     }
+
 
 }

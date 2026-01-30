@@ -1,5 +1,8 @@
 package com.smart.city.SmartCityInformationPortal.controllers;
 
+import com.smart.city.SmartCityInformationPortal.dto.city_updates.CityUpdatesRequestDto;
+import com.smart.city.SmartCityInformationPortal.dto.city_updates.CityUpdatesUpdateImageDto;
+import com.smart.city.SmartCityInformationPortal.dto.city_updates.CityUpdatesUpdateTitleDescriptionDto;
 import com.smart.city.SmartCityInformationPortal.entities.*;
 import com.smart.city.SmartCityInformationPortal.services.*;
 import com.smart.city.SmartCityInformationPortal.dto.hospital.HospitalFacilityDto;
@@ -254,4 +257,46 @@ public class CityAdminController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    /// cityUpdates
+
+    @PostMapping("/create-city-updates")
+    public ResponseEntity<?> createCityUpdates(@RequestBody CityUpdatesRequestDto cityUpdatesRequestDto){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean cityUpdates = cityAdminService.createCityUpdates(cityUpdatesRequestDto, email);
+        if(cityUpdates){
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/update-city-update")
+    public ResponseEntity<?> updateCityUpdates(@RequestBody CityUpdatesUpdateTitleDescriptionDto cityUpdatesUpdateTitleDescriptionDto){
+        boolean cityUpdates = cityAdminService.updateCityUpdatesTitleAndDesc(cityUpdatesUpdateTitleDescriptionDto);
+        if(cityUpdates){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/update-city-update-image")
+    public ResponseEntity<?> updateImageCityUpdates(@RequestBody CityUpdatesUpdateImageDto cityUpdatesUpdateImageDto){
+        boolean cityUpdates = cityAdminService.updateCityUpdatesImage(cityUpdatesUpdateImageDto);
+        if(cityUpdates){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/update-city-delete/{cityUpdateId}")
+    public ResponseEntity<?> deleteCityUpdates(@PathVariable String cityUpdateId){
+        boolean cityUpdates = cityAdminService.deleteCityUpdates(cityUpdateId);
+        if(cityUpdates){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

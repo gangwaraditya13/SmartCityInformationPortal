@@ -1,7 +1,5 @@
 package com.smart.city.SmartCityInformationPortal.security;
 
-import com.smart.city.SmartCityInformationPortal.entities.User;
-import com.smart.city.SmartCityInformationPortal.repository.UserRepository;
 import com.smart.city.SmartCityInformationPortal.services.Impl.UserDetailServiceImp;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;

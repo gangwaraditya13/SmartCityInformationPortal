@@ -36,4 +36,6 @@ public class City {
     List<Utility> cityUtilities= new ArrayList<>();
     @DBRef
     List<Complaint> cityComplaint= new ArrayList<>();
+    @DBRef
+    List<CityUpdates> cityUpdates = new ArrayList<>();
 }

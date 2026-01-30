@@ -1,4 +1,8 @@
 package com.smart.city.SmartCityInformationPortal.services;
+import com.smart.city.SmartCityInformationPortal.dto.city_updates.CityUpdatesRequestDto;
+import com.smart.city.SmartCityInformationPortal.dto.city_updates.CityUpdatesResponseDto;
+import com.smart.city.SmartCityInformationPortal.dto.city_updates.CityUpdatesUpdateImageDto;
+import com.smart.city.SmartCityInformationPortal.dto.city_updates.CityUpdatesUpdateTitleDescriptionDto;
 import com.smart.city.SmartCityInformationPortal.entities.City;
 import com.smart.city.SmartCityInformationPortal.entities.Complaint;
 import com.smart.city.SmartCityInformationPortal.entities.User;
@@ -21,6 +25,9 @@ public class CityAdminService {
 
     @Autowired
     private CityRepository cityRepository;
+
+    @Autowired
+    private CityUpdatesServices cityUpdatesServices;
 
     public List<Complaint> pendingComplaint(String email){
 
@@ -81,6 +88,43 @@ public class CityAdminService {
             return true;
         }
         return false;
+    }
+
+    //CityUpdates
+    public boolean createCityUpdates(CityUpdatesRequestDto cityUpdatesRequestDto, String email){
+        try {
+            cityUpdatesServices.createCityUpdates(cityUpdatesRequestDto, email);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean updateCityUpdatesTitleAndDesc(CityUpdatesUpdateTitleDescriptionDto cityUpdatesUpdateTitleDescriptionDto){
+        try {
+            cityUpdatesServices.updateCityUpdates(cityUpdatesUpdateTitleDescriptionDto);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean updateCityUpdatesImage(CityUpdatesUpdateImageDto cityUpdatesUpdateImageDto){
+        try {
+            cityUpdatesServices.updateCityUpdatesImage(cityUpdatesUpdateImageDto);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean deleteCityUpdates(String id){
+        try {
+            cityUpdatesServices.deleteCityUpdate(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package com.smart.city.SmartCityInformationPortal.controllers;
 
 import com.smart.city.SmartCityInformationPortal.dto.complaint.ComplaintDto;
 import com.smart.city.SmartCityInformationPortal.dto.complaint.UpdateTitleOrDescription;
+import com.smart.city.SmartCityInformationPortal.dto.user.ImageUpdateRequestDto;
 import com.smart.city.SmartCityInformationPortal.entities.Complaint;
 import com.smart.city.SmartCityInformationPortal.services.ComplaintService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ public class ComplaintController {
     @Autowired
     private ComplaintService complaintService;
 
+    /// if image is uploaded before hitting this endpoint first upload Image -- it is in UI;
     @PostMapping
     public ResponseEntity<?> newComplaint(@RequestBody ComplaintDto complaint){
 
@@ -41,7 +43,7 @@ public class ComplaintController {
     public ResponseEntity<?> deleteComplaint(@PathVariable String complaintId){
         boolean response = complaintService.deleteComplaint(complaintId);
         if(response){
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

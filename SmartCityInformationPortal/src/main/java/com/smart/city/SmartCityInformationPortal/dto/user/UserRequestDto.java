@@ -27,8 +27,6 @@ public class UserRequestDto {
     )
 
     private String idProof;
-    private String profilePhotoURL;
-    private String profileProductId;
     private String address;
     private String city;
 }

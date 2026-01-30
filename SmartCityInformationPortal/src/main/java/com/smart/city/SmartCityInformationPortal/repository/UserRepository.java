@@ -2,7 +2,9 @@ package com.smart.city.SmartCityInformationPortal.repository;
 
 import com.smart.city.SmartCityInformationPortal.entities.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserRepository extends MongoRepository<User, Object> {
 
     User findByEmail(String email);

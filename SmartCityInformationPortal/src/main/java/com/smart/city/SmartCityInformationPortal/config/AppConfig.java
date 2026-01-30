@@ -7,13 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Configuration
+@EnableMongoAuditing
 public class AppConfig {
     @Autowired
     private UserDetailServiceImp userDetailServiceImp;
@@ -39,12 +44,24 @@ public class AppConfig {
         return new ModelMapper();
     }
 
-    @Value("${CLOUDINARY_URL}")
-    private String cloudinaryURL;
+    @Value("${CLOUD_NAME}")
+    private String cloudName;
+    @Value("${API_KEY}")
+    private String apiKey;
+    @Value("${API_SECRET}")
+    private String apiSecret;
 
     @Bean
-    public Cloudinary cloudinary() {
-        return new Cloudinary(cloudinaryURL);
+    public Cloudinary getCloudinary(){
+
+        Map conifg = new HashMap();
+
+        conifg.put("cloud_name",cloudName);
+        conifg.put("api_key",apiKey);
+        conifg.put("api_secret",apiSecret);
+        conifg.put("secure",true);
+
+        return new Cloudinary(conifg);
     }
 
 }

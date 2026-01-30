@@ -1,6 +1,9 @@
 package com.smart.city.SmartCityInformationPortal.controllers;
 
+import com.smart.city.SmartCityInformationPortal.dto.city_updates.CityUpdatesResponseDto;
+import com.smart.city.SmartCityInformationPortal.dto.user.ImageUpdateRequestDto;
 import com.smart.city.SmartCityInformationPortal.services.CityService;
+import com.smart.city.SmartCityInformationPortal.services.CityUpdatesServices;
 import com.smart.city.SmartCityInformationPortal.services.CloudinaryImageService;
 import com.smart.city.SmartCityInformationPortal.services.UserService;
 import com.smart.city.SmartCityInformationPortal.dto.city.CityNameDto;
@@ -32,6 +35,9 @@ public class UserController {
 
     @Autowired
     private CloudinaryImageService cloudinaryImageService;
+
+    @Autowired
+    private CityUpdatesServices cityUpdatesServices;
 
     @GetMapping("/getuser")
     public ResponseEntity<UserDto> getUser(){
@@ -102,9 +108,47 @@ public class UserController {
     public ResponseEntity<Map> uploadImage(@RequestParam("image") MultipartFile file){
         Map data = cloudinaryImageService.uploadImage(file);
         if(!data.isEmpty()) {
-            return new ResponseEntity<>(data, HttpStatus.OK);
+            return new ResponseEntity<>(data, HttpStatus.CREATED);
         }else{
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /// first hit /image-upload endpoint then send the ImageUpdateRequestUrl to /update-profile-image for profile pic
+  /// Image Update
+    @PutMapping("/update-profile-image")
+    public ResponseEntity<?> updateImage(@RequestBody ImageUpdateRequestDto imageUpdateRequestDto){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean done = userService.updateUser(imageUpdateRequestDto, email);
+        if(done){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/delete-profile-image")
+    public ResponseEntity<?> deleteImage(@RequestBody ImageUpdateRequestDto imageUpdateRequestDto){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean done = userService.deleteUserProfilePic(imageUpdateRequestDto,email);
+        if(done){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /// get cityUpdates make here to get all updates
+
+    @GetMapping("/city-updates")
+    public ResponseEntity<?> getCityUpdates(){
+        try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            CityUpdatesResponseDto cityUpdates = cityUpdatesServices.getCityUpdates(email);
+            return new ResponseEntity<>(cityUpdates,HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 }

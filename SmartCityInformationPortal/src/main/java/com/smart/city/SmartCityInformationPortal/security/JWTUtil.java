@@ -33,7 +33,7 @@ public class JWTUtil{
                 .claims(claims)
                 .subject(email)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()+(1000*60*60)))
+                .expiration(new Date(System.currentTimeMillis()+(1000*60*60*24*7)))
                 .signWith(getsecretKey()).compact();
     }
 
@@ -53,7 +53,7 @@ public class JWTUtil{
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getsecretKey())
                 .build()

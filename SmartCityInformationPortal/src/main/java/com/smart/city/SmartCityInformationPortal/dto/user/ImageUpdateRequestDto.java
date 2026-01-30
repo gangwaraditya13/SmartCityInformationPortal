@@ -1,4 +1,4 @@
-package com.smart.city.SmartCityInformationPortal.dto.complaint;
+package com.smart.city.SmartCityInformationPortal.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateTitleOrDescription {
-    private String id;
-    private String title;
-    private String description;
+public class ImageUpdateRequestDto {
     private String profilePhotoURL;
     private String profileProductId;
 }

@@ -1,8 +1,10 @@
 package com.smart.city.SmartCityInformationPortal.controllers;
 
+import com.smart.city.SmartCityInformationPortal.dto.token.JWTRequestTokenDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.SearchCityDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.TokenResponseDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.UserLoginRequestDto;
+import com.smart.city.SmartCityInformationPortal.security.JWTUtil;
 import com.smart.city.SmartCityInformationPortal.services.CityService;
 import com.smart.city.SmartCityInformationPortal.services.UserService;
 import com.smart.city.SmartCityInformationPortal.dto.user.UserRequestDto;
@@ -21,7 +23,8 @@ public class PublicController {
 
     @Autowired
     private CityService cityService;
-
+    @Autowired
+    private JWTUtil jwtUtil;
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserRequestDto user){
         boolean check = userService.checkUser(user);
@@ -51,6 +54,16 @@ public class PublicController {
         SearchCityDto cityByHint = cityService.getCityByHint(name);
 
         return new ResponseEntity<>(cityByHint,HttpStatus.OK);
+    }
+
+    @PostMapping("/validate-token")
+    public ResponseEntity<?> validateJWTToken(@RequestBody JWTRequestTokenDto jwtRequestTokenDto){
+        boolean expired = jwtUtil.isTokenExpired(jwtRequestTokenDto.getJwtToken());
+        if(!expired){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 
 }
