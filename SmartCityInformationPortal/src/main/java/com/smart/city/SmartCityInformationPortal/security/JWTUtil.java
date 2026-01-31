@@ -19,7 +19,7 @@ public class JWTUtil{
 
     private UserDetailServiceImp userDetailServiceImp;
 
-    @Value("${jwt.secretKey}")
+    @Value("${JWT_SECRET_KEY}")
     private String secretKey;
 
     public SecretKey getsecretKey(){
