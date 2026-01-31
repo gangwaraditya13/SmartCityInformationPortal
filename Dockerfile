@@ -1,12 +1,12 @@
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /build
 
-COPY pom.xml .
-COPY .mvn .mvn
-COPY mvnw .
+COPY SmartCityInformationPortal/pom.xml .
+COPY SmartCityInformationPortal/.mvn .mvn
+COPY SmartCityInformationPortal/mvnw .
 RUN chmod +x mvnw
 
-COPY src ./src
+COPY SmartCityInformationPortal/src ./src
 RUN ./mvnw -B clean package -DskipTests
 
 FROM eclipse-temurin:21-jdk-jammy
