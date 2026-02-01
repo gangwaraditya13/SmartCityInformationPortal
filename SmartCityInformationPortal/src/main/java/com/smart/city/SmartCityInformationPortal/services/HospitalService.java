@@ -26,8 +26,12 @@ public class HospitalService {
     @Autowired
     private CityRepository cityRepository;
 
-    @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    public HospitalService(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     @Autowired
     private UserRepository userRepository;

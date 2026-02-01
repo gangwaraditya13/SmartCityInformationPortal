@@ -30,8 +30,12 @@ public class CityUpdatesServices {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    public CityUpdatesServices(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     @Autowired
     private CloudinaryImageService cloudinaryImageService;

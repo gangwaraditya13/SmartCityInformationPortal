@@ -18,9 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
 public class ComplaintService {
+    private ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
+    public ComplaintService(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     @Autowired
     private ComplaintRepository complaintRepository;

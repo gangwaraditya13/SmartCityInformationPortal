@@ -19,9 +19,12 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class CityService {
+    private ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
+    public CityService(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     @Autowired
     private CityRepository cityRepository;

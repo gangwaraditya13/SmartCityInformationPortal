@@ -26,9 +26,12 @@ public class UtilityService {
 
     @Autowired
     private UserRepository userRepository;
+    private ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
+    public UtilityService(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     public Utility newutility(UtilityDto newutility, String cityAdminEmail){
 

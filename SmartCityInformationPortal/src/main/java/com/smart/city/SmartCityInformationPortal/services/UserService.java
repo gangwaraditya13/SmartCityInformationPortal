@@ -31,9 +31,12 @@ import java.util.stream.Stream;
 @Service
 @Slf4j
 public class UserService {
+    private ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
+    public UserService(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     @Autowired
     private UserRepository userRepository;

@@ -24,9 +24,12 @@ public class SchoolService {
 
     @Autowired
     private UserRepository userRepository;
+    private ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
+    public SchoolService(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     public boolean newSchool(SchoolDto newSchoolDto, String adminEmail){
 
