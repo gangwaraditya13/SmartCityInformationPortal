@@ -15,6 +15,7 @@ import com.smart.city.SmartCityInformationPortal.dto.school.SchoolNameDto;
 import com.smart.city.SmartCityInformationPortal.dto.utility.UtilityDto;
 import com.smart.city.SmartCityInformationPortal.dto.utility.UtilityIdDto;
 import com.smart.city.SmartCityInformationPortal.dto.utility.UtilityUpdateDto;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/city-admin")
+@SecurityRequirement(name = "bearerAuth")
 public class CityAdminController {
 
     @Autowired

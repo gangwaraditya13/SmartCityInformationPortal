@@ -12,19 +12,25 @@ import com.smart.city.SmartCityInformationPortal.dto.user.PasswordResetDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.RequestPasswordDot;
 import com.smart.city.SmartCityInformationPortal.dto.user.UserDto;
 import com.smart.city.SmartCityInformationPortal.dto.user.UserResponseCityDto;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/user")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     @Autowired
@@ -104,15 +110,33 @@ public class UserController {
     }
 
     /// Image
-    @PostMapping("/image-upload")
-    public ResponseEntity<Map> uploadImage(@RequestParam("image") MultipartFile file){
-        Map data = cloudinaryImageService.uploadImage(file);
-        if(!data.isEmpty()) {
+    @PostMapping(
+            value = "/image-upload",
+            consumes = "multipart/form-data"
+    )
+    @Operation(
+            summary = "Upload profile image",
+            description = "Upload user profile image to Cloudinary"
+    )
+    public ResponseEntity<Map<String, Object>> uploadImage(
+            @Parameter(
+                    description = "Image file (jpg, png, jpeg)",
+                    required = true,
+                    content = @Content(
+                            mediaType = "multipart/form-data",
+                            schema = @Schema(type = "string", format = "binary")
+                    )
+            )
+            @RequestPart("image") MultipartFile file
+    ) {
+        Map<String, Object> data = cloudinaryImageService.uploadImage(file);
+        if (!data.isEmpty()) {
             return new ResponseEntity<>(data, HttpStatus.CREATED);
-        }else{
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 
     /// first hit /image-upload endpoint then send the ImageUpdateRequestUrl to /update-profile-image for profile pic
   /// Image Update

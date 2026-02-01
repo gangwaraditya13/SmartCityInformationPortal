@@ -5,6 +5,7 @@ import com.smart.city.SmartCityInformationPortal.dto.complaint.UpdateTitleOrDesc
 import com.smart.city.SmartCityInformationPortal.dto.user.ImageUpdateRequestDto;
 import com.smart.city.SmartCityInformationPortal.entities.Complaint;
 import com.smart.city.SmartCityInformationPortal.services.ComplaintService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/complaint")
+@SecurityRequirement(name = "bearerAuth")
 public class ComplaintController {
     @Autowired
     private ComplaintService complaintService;

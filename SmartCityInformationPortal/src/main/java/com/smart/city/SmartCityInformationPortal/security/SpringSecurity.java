@@ -29,13 +29,21 @@ public class SpringSecurity {
     public SpringSecurity(JWTAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
+
+    public static final String[] PUBLIC_URLS = {
+            "/public/**",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity Http) throws Exception {
 
 //        Http.formLogin(Customizer.withDefaults());
 
         return Http.authorizeHttpRequests(request -> request
-                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers(PUBLIC_URLS).permitAll()
                         .requestMatchers("/complaint/**", "/user/**").authenticated()
                         .requestMatchers("/admin/**").hasAnyRole(Roles.ADMIN.toString(), Roles.CITY_ADMIN.toString())
                         .requestMatchers("/city-admin/**").hasRole(Roles.CITY_ADMIN.toString())
