@@ -54,7 +54,7 @@ public class ComplaintController {
     public ResponseEntity<?> getComplaint(@PathVariable String complaintId){
         Complaint response = complaintService.getComplaint(complaintId);
         if(response != null){
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
