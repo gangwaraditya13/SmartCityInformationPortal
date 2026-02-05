@@ -36,7 +36,7 @@ public class ComplaintController {
     public ResponseEntity<?> updateComplaint(@RequestBody UpdateTitleOrDescription updateTitleOrDescription){
         boolean response = complaintService.updateComplaint(updateTitleOrDescription);
         if(response){
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
