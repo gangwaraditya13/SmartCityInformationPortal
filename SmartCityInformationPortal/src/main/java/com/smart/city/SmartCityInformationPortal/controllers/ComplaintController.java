@@ -33,7 +33,7 @@ public class ComplaintController {
     }
 
     @PutMapping("/update-complaint")
-    public ResponseEntity<?> updateComplaint(@RequestBody UpdateTitleOrDescription updateTitleOrDescription, @PathVariable String complaintId){
+    public ResponseEntity<?> updateComplaint(@RequestBody UpdateTitleOrDescription updateTitleOrDescription){
         boolean response = complaintService.updateComplaint(updateTitleOrDescription);
         if(response){
             return new ResponseEntity<>(HttpStatus.CREATED);
