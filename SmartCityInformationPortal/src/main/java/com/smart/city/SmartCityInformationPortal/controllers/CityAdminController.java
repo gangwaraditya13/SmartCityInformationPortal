@@ -7,10 +7,8 @@ import com.smart.city.SmartCityInformationPortal.entities.*;
 import com.smart.city.SmartCityInformationPortal.services.*;
 import com.smart.city.SmartCityInformationPortal.dto.hospital.HospitalFacilityDto;
 import com.smart.city.SmartCityInformationPortal.dto.city.CityDto;
-import com.smart.city.SmartCityInformationPortal.dto.hospital.HospitalIdDto;
 import com.smart.city.SmartCityInformationPortal.dto.hospital.HospitalDto;
 import com.smart.city.SmartCityInformationPortal.dto.school.SchoolDto;
-import com.smart.city.SmartCityInformationPortal.dto.school.SchoolIdDto;
 import com.smart.city.SmartCityInformationPortal.dto.school.SchoolNameDto;
 import com.smart.city.SmartCityInformationPortal.dto.utility.UtilityDto;
 import com.smart.city.SmartCityInformationPortal.dto.utility.UtilityIdDto;
@@ -20,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -95,9 +92,9 @@ public class CityAdminController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/delete-utility")
-    public ResponseEntity<?> deleteUtility(@RequestBody UtilityIdDto utilityId){
-        boolean response = utilityService.deleteutility(utilityId.getUtilityId());
+    @DeleteMapping("/delete-utility/{utilityId}")
+    public ResponseEntity<?> deleteUtility(@PathVariable String utilityId){
+        boolean response = utilityService.deleteutility(utilityId);
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -146,7 +143,7 @@ public class CityAdminController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/remove-facility")
+    @PostMapping("/remove-facility")
     public ResponseEntity<?> removeFacility(@RequestBody HospitalFacilityDto hospitalFacilityDto){
         boolean response = hospitalService.deleteFacility(hospitalFacilityDto);
 
@@ -156,9 +153,9 @@ public class CityAdminController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/delete-hospital")
-    public ResponseEntity<?> deleteHospital(@RequestBody HospitalIdDto hospitalIdDto){
-        boolean response = hospitalService.deleteHospital(hospitalIdDto.getHospitalId());
+    @DeleteMapping("/delete-hospital/{hospitalId}")
+    public ResponseEntity<?> deleteHospital(@PathVariable String hospitalId){
+        boolean response = hospitalService.deleteHospital(hospitalId);
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -196,9 +193,9 @@ public class CityAdminController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/delete-school")
-    public ResponseEntity<?> deleteSchool(@RequestBody SchoolIdDto schoolIdDto){
-        boolean response = schoolService.deleteSchool(schoolIdDto.getSchoolId());
+    @DeleteMapping("/delete-school/{schoolId}")
+    public ResponseEntity<?> deleteSchool(@PathVariable String schoolId){
+        boolean response = schoolService.deleteSchool(schoolId);
         if(response) {
             return new ResponseEntity<>(HttpStatus.OK);
         }

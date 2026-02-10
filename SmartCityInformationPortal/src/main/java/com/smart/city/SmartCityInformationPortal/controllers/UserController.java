@@ -74,7 +74,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @DeleteMapping("/delete-user")
+    @PostMapping("/delete-user")
     public ResponseEntity<?> deleteUser(@RequestBody RequestPasswordDot passwordRequest){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String Email = authentication.getName();
@@ -151,7 +151,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete-profile-image")
+    @PostMapping("/delete-profile-image")
     public ResponseEntity<?> deleteImage(@RequestBody ImageUpdateRequestDto imageUpdateRequestDto){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean done = userService.deleteUserProfilePic(imageUpdateRequestDto,email);
