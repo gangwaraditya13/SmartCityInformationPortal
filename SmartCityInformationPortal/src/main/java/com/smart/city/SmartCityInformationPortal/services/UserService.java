@@ -192,8 +192,10 @@ public class UserService {
                 complaintHavingImage.forEach(complaint -> {
                     complaintImageList.add(complaint.getProfileProductId());
                 });
-
-                cloudinaryImageService.deleteImages(complaintImageList);
+                complaintImageList.add(user.getProfileProductId());
+                if(!complaintImageList.isEmpty()) {
+                    cloudinaryImageService.deleteImages(complaintImageList);
+                }
                 userRepository.deleteByEmail(Email);
                 complaintImageList.clear();
 
