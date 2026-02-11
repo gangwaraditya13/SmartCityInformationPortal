@@ -56,7 +56,9 @@ public class UserService {
     @Autowired
     private CloudinaryImageService cloudinaryImageService;
 
-    private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder PASSWORD_ENCODER;
+
 
     /// new user
     @Transactional
@@ -178,8 +180,8 @@ public class UserService {
     }
 
     /// delete user
-    public boolean deleteUser(String password,String Email){
-        User user = userRepository.findByEmail(Email);
+    public boolean deleteUser(String password,String email){
+        User user = userRepository.findByEmail(email);
         boolean userPassword = PASSWORD_ENCODER.matches(password,user.getPassword());
         if(userPassword){
             try {
@@ -192,11 +194,13 @@ public class UserService {
                 complaintHavingImage.forEach(complaint -> {
                     complaintImageList.add(complaint.getProfileProductId());
                 });
-                complaintImageList.add(user.getProfileProductId());
-                if(!complaintImageList.isEmpty()) {
+                if(user.getProfileProductId() !=null && !user.getProfileProductId().isEmpty()) {
+                    complaintImageList.add(user.getProfileProductId());
+                }
+                if(user.getProfileProductId() !=null && !complaintImageList.isEmpty()) {
                     cloudinaryImageService.deleteImages(complaintImageList);
                 }
-                userRepository.deleteByEmail(Email);
+                userRepository.deleteByEmail(email);
                 complaintImageList.clear();
 
                 return true;
